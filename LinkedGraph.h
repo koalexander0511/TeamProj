@@ -1,6 +1,7 @@
 //  Created by Frank M. Carrano and Tim Henry.
 //  Copyright (c) 2013 __Pearson Education__. All rights reserved.
 //  Modified by C. Lee-Klawender
+//  UPDATED 06/08/2015 (in remove, added delete statements)
 
 /** @file LinkedGraph.h */
 
@@ -58,7 +59,7 @@ public:
 
    //---> YOU DECLARE HERE (AND WRITE BELOW) THE MEMBER FUNCTION TO
    //         WRITE THE GRAPH TO A TEXT FILE (SUGGEST TO PASS AN
-   //        ifstream TO THIS !
+   //        ofstream TO THIS !
 
 
 }; // end GraphInterface
@@ -119,9 +120,16 @@ bool LinkedGraph<LabelType>::remove(LabelType start, LabelType end)
 
          // If either vertex no longer has a neighbor, remove it
          if (startVertex->getNumberOfNeighbors() == 0)
-            vertices.remove(start);
+         {
+             vertices.remove(start);
+             delete startVertex; // UPDATED 06/08/2015
+         }
+
          if (endVertex->getNumberOfNeighbors() == 0)
+         {
             vertices.remove(end);
+            delete endVertex;  // UPDATED 06/08/2015
+         }
       }
       else
          successful = false; // Failed disconnect from endVertex
@@ -244,7 +252,7 @@ template<class LabelType>
 Vertex<LabelType>* LinkedGraph<LabelType>::
 findOrCreateVertex(const LabelType& vertexLabel)
 {
-   Vertex<LabelType>* theVertex = nullptr;
+   Vertex<LabelType>* theVertex = 0;
 
    if (vertices.contains(vertexLabel))
    {
@@ -262,5 +270,5 @@ findOrCreateVertex(const LabelType& vertexLabel)
 
 // WRITE THE MEMBER FUNCTION HERE TO
    //         WRITE THE GRAPH TO A TEXT FILE (SUGGEST TO PASS AN
-   //        ifstream TO THIS !
+   //        ofstream TO THIS !
 #endif
