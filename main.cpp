@@ -7,6 +7,9 @@
 
 //  Created by Frank M. Carrano and Tim Henry.
 //  Copyright (c) 2013 __Pearson Education__. All rights reserved.
+//
+// Program Edited by Ko Outlaw-Spruell, James Hinds, and Victoriia Petrusha
+
 
 #include <iostream>
 #include <string>
