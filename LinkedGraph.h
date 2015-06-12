@@ -15,7 +15,9 @@
                             // You're required to use this implementation
                              // of an adjacency list.
 #include <queue>
+
 #include <fstream>
+#include "LinkedStack.h"
 
 using namespace std;
 
@@ -23,6 +25,32 @@ template<class LabelType>
 class LinkedGraph : public GraphInterface<LabelType>
 {
 protected: // protected so you can derive this class for you team project solution
+
+    // nested class for LinkedStack element store:
+    // operation type(add/remove), item1, and item2.
+    class UndoStackElement
+    {
+    public:
+        enum lastOperation {ADD, REMOVE};
+    private:
+        LabelType item1;
+        LabelType item2;
+        lastOperation lastOp;
+    public:
+        UndoStackElement(lastOperation lo, LabelType a, LabelType b)
+        {lastOp = lo; item1 = a; item2 = b; }
+        void applyUndo()
+        {
+            if(lastOp == ADD)
+                remove(item1, item2);
+            else if(lastOp == REMOVE)
+                add(item1, item2);
+        }
+    };
+
+    LinkedStack<LabelType>* undoStack; // move to LinkedGraph.h
+
+
    int numberOfVertices;
    int numberOfEdges;
 
@@ -59,24 +87,21 @@ public:
    void depthFirstTraversal(LabelType start, void visit(LabelType&));
    void breadthFirstTraversal(LabelType start, void visit(LabelType&));
 
-   //---> YOU DECLARE HERE (AND WRITE BELOW) THE MEMBER FUNCTION TO
-   //         WRITE THE GRAPH TO A TEXT FILE (SUGGEST TO PASS AN
-   //        ofstream TO THIS !
    virtual void writeToFile(ofstream&) const;
-
-
 };
 
 template<class LabelType>
 LinkedGraph<LabelType>::
 LinkedGraph(): numberOfVertices(0), numberOfEdges(0)
 {
+    undoStack = new LinkedStack<LabelType>();
 	pvertexIterator = 0;
 }  // end default constructor
 
 template<class LabelType>
-LinkedGraph<LabelType>::~LinkedGraph() {
-
+LinkedGraph<LabelType>::~LinkedGraph()
+{
+    delete undoStack;
 }
 
 template<class LabelType>

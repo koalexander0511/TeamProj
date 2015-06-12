@@ -7,31 +7,37 @@
 #include "LinkedGraph.h"
 #include "Vertex.h"
 #include "Edge.h"
-#include "LinkedStack.h"
 
 using namespace std;
 
 template <class LabelType>
 class Dijkstra : public LinkedGraph<LabelType>
 {
-    // nested class for LinkedStack element store:
-    // operation type(add/remove), start, and end.
+    // nested class for Dijkstra vertex
+    // keep track of previous vertex in path, and distance to there
+    template <class ItemType>
+    class DijkstraVertex
+    {
+    private:
+        Vertex<ItemType> vert; // the vertex
+        int distTo; // distance to this vertex
+        DijkstraVertex prevVertex; // DijkstraVertex that brought you to this one
+        bool isFinished;
+    public:
+        DijkstraVertex(LabelType label) : vert(label), distTo(INT_MAX), prevVertex(0), isFinished(false) {}
+        void setDist(int d) {distTo = d; }
+        void setPrev(DijkstraVertex& pv) {prevVertex = pv; }
+    };
 
 private:
-    LabelType startPoint;
-    LabelType endPoint;
+    DijkstraVertex<LabelType> startPoint;
+    DijkstraVertex<LabelType> endPoint;
 
-    vector<int> dist;
-    vector<Vertex<LabelType> > prevVertex;
+    vector<DijkstraVertex<LabelType>* > finishedVertices; // store dynamically
+    vector<DijkstraVertex<LabelType>* > unfinishedVertices; // store dynamically
 
-    vector<Vertex<LabelType> > finishedVertecies;
-    vector<Vertex<LabelType> > unfinishedVertices;
+    void prepareVertices(LabelType& x);
 
-    LinkedStack<LabelType>* undoStack;
-
-    void addToUnfinished(LabelType& x) {unfinishedVertices.push_back(x); }
-
-    bool setDistanceTo(const LabelType&);
     bool applyDijkstra();
 
 public:
@@ -55,20 +61,26 @@ template <class LabelType>
 Dijkstra<LabelType>::Dijkstra()
 {
 
-    undoStack = new LinkedStack<LabelType>();
 }
 
 template <class LabelType>
 Dijkstra<LabelType>::~Dijkstra()
 {
 
-    delete undoStack;
+}
+
+template <class LabelType>
+void Dijkstra<LabelType>::prepareVertices(LabelType& x)
+{
+    unfinishedVertices.push_back(new DijkstraVertex<LabelType>(x));
 }
 
 template <class LabelType>
 bool Dijkstra<LabelType>::applyDijkstra()
 {
-    this->depthFirstTraversal(startPoint, addToUnfinished);
+    this->depthFirstTraversal(startPoint, prepareVertices);
+    // now unfinishedVertices is filled with pointers to DijkstraVertices
+
 
     return false;
 }
