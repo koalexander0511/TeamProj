@@ -14,6 +14,7 @@
 #include <iostream>
 #include <string>
 #include "LinkedGraph.h"
+#include "Dijkstra.h"
 
 using namespace std;
 

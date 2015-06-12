@@ -15,6 +15,7 @@
                             // You're required to use this implementation
                              // of an adjacency list.
 #include <queue>
+#include <fstream>
 
 using namespace std;
 
@@ -61,6 +62,7 @@ public:
    //---> YOU DECLARE HERE (AND WRITE BELOW) THE MEMBER FUNCTION TO
    //         WRITE THE GRAPH TO A TEXT FILE (SUGGEST TO PASS AN
    //        ofstream TO THIS !
+   virtual void writeToFile(ofstream&) const;
 
 
 }; // end GraphInterface
@@ -73,7 +75,7 @@ LinkedGraph(): numberOfVertices(0), numberOfEdges(0)
 }  // end default constructor
 
 template<class LabelType>
-LinkedGraph<LabelType>::~LinkedGraph(){
+LinkedGraph<LabelType>::~LinkedGraph() {
 
 }
 
@@ -258,7 +260,7 @@ template<class LabelType>
 Vertex<LabelType>* LinkedGraph<LabelType>::
 findOrCreateVertex(const LabelType& vertexLabel)
 {
-   Vertex<LabelType>* theVertex = nullptr;
+   Vertex<LabelType>* theVertex = 0;
 
    if (vertices.contains(vertexLabel))
    {
@@ -277,4 +279,11 @@ findOrCreateVertex(const LabelType& vertexLabel)
 // WRITE THE MEMBER FUNCTION HERE TO
    //         WRITE THE GRAPH TO A TEXT FILE (SUGGEST TO PASS AN
    //        ofstream TO THIS !
+template <class LabelType>
+void LinkedGraph<LabelType>::writeToFile(ofstream& fout) const
+{
+    fout << "LinkedGraph write to file. " << endl;
+}
+
+
 #endif
