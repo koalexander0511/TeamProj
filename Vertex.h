@@ -115,13 +115,13 @@ template<class LabelType>
 bool Vertex<LabelType>::connect(const LabelType& endVertex, const int edgeWeight)
 {
    Edge<LabelType> thisEdge(endVertex, edgeWeight);
-   return adjacencyList.add(endVertex, thisEdge);   
+   return adjacencyList.add(endVertex, thisEdge);
 }  // end connect
 
 template<class LabelType>
 bool Vertex<LabelType>::disconnect(const LabelType& endVertex)
 {
-   return adjacencyList.remove(endVertex);      
+   return adjacencyList.remove(endVertex);
 }  // end disconnect
 
 template<class LabelType>
@@ -137,7 +137,7 @@ int Vertex<LabelType>::getEdgeWeight(const LabelType& endVertex) const
 template<class LabelType>
 int Vertex<LabelType>::getNumberOfNeighbors() const
 {
-   return adjacencyList.getNumberOfItems(); 
+   return adjacencyList.getNumberOfItems();
 }  // end getNumberOfNeighbors
 
 template<class LabelType>
