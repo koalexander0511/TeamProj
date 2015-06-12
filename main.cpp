@@ -2,7 +2,7 @@
 /*
     CIS 22C Team 4 Project: Dijkstra's algorithm (shortest path)
 
-    9 June 2015
+    12 June 2015
 */
 
 //  Created by Frank M. Carrano and Tim Henry.
