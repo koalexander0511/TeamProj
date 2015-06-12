@@ -5,7 +5,7 @@ Written by C. Lee-Klawender
 
 The DACmap is the type used in LinkedGraph and Vertex classes
 
-These classes wwere written so you don't have to understand how to use
+These classes were written so you don't have to understand how to use
 the C++ STL map nor its iterator, and has easy-to-use function for access
 */
 using namespace std;
