@@ -65,7 +65,7 @@ public:
    virtual void writeToFile(ofstream&) const;
 
 
-}; // end GraphInterface
+};
 
 template<class LabelType>
 LinkedGraph<LabelType>::

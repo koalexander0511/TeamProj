@@ -18,13 +18,20 @@ class Dijkstra : public LinkedGraph<LabelType>
     // operation type(add/remove), start, and end.
 
 private:
-    Vertex<LabelType> startPoint;
-    Vertex<LabelType> endPoint;
+    LabelType startPoint;
+    LabelType endPoint;
+
     vector<int> dist;
+    vector<Vertex<LabelType> > prevVertex;
+
     vector<Vertex<LabelType> > finishedVertecies;
     vector<Vertex<LabelType> > unfinishedVertices;
+
     LinkedStack<LabelType>* undoStack;
 
+    void addToUnfinished(LabelType& x) {unfinishedVertices.push_back(x); }
+
+    bool setDistanceTo(const LabelType&);
     bool applyDijkstra();
 
 public:
@@ -35,8 +42,12 @@ public:
     bool add(LabelType start, LabelType end, int edgeWeight = 0);
     bool remove(LabelType start, LabelType end);
     void undo();
+
     bool setStartPoint(LabelType);
     bool setEndPoint(LabelType);
+
+    int distanceTo(LabelType) const;
+
     void writeToFile(ofstream&) const;
 };
 
@@ -55,10 +66,18 @@ Dijkstra<LabelType>::~Dijkstra()
 }
 
 template <class LabelType>
+bool Dijkstra<LabelType>::applyDijkstra()
+{
+    this->depthFirstTraversal(startPoint, addToUnfinished);
+
+    return false;
+}
+
+template <class LabelType>
 bool Dijkstra<LabelType>::add(LabelType start, LabelType end, int edgeWeight)
 {
     // document change with undoStack, then add() as usual
-    // (change later if Dijkstra::add() requires it)
+    // (modify later if Dijkstra::add() requires it)
 
     return LinkedGraph<LabelType>::add(start, end, edgeWeight);
 }
@@ -93,6 +112,15 @@ bool Dijkstra<LabelType>::setEndPoint(LabelType endP)
     // check if it's valid
     // then set
     return false;
+}
+
+template <class LabelType>
+int Dijkstra<LabelType>::distanceTo(LabelType x) const
+{
+    // check if x is in the graph
+    // then retrieve correct distance from startPoint to x
+
+    return -1;
 }
 
 template <class LabelType>
