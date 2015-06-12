@@ -2,7 +2,8 @@
 //  Copyright (c) 2013 __Pearson Education__. All rights reserved.
 //  Modified by C. Lee-Klawender
 //  UPDATED 06/08/2015 (in remove, added delete statements)
-
+//  UPDATED 06/11/2015 (in add, didn't allow adding an edge that connects to itself AND)
+//                       AND in remove, decremented numberOfVertices if not connected)
 /** @file LinkedGraph.h */
 
 #ifndef _LINKED_GRAPH
@@ -91,6 +92,9 @@ int LinkedGraph<LabelType>::getNumEdges() const
 template<class LabelType>
 bool LinkedGraph<LabelType>::add(LabelType start, LabelType end, int edgeWeight)
 {
+   if( start == end )               // UPDATED 06/11/2015
+        return false;
+
    Vertex<LabelType>* startVertex = findOrCreateVertex(start);
    Vertex<LabelType>* endVertex   = findOrCreateVertex(end);
 
@@ -122,12 +126,14 @@ bool LinkedGraph<LabelType>::remove(LabelType start, LabelType end)
          if (startVertex->getNumberOfNeighbors() == 0)
          {
              vertices.remove(start);
+             --numberOfVertices; // UPDATED 06/11/2015
              delete startVertex; // UPDATED 06/08/2015
          }
 
          if (endVertex->getNumberOfNeighbors() == 0)
          {
             vertices.remove(end);
+            --numberOfVertices; // UPDATED 06/11/2015
             delete endVertex;  // UPDATED 06/08/2015
          }
       }
@@ -252,7 +258,7 @@ template<class LabelType>
 Vertex<LabelType>* LinkedGraph<LabelType>::
 findOrCreateVertex(const LabelType& vertexLabel)
 {
-   Vertex<LabelType>* theVertex = 0;
+   Vertex<LabelType>* theVertex = nullptr;
 
    if (vertices.contains(vertexLabel))
    {
