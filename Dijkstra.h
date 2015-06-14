@@ -21,78 +21,110 @@ class Dijkstra : public LinkedGraph<LabelType>
         Vertex<LabelType> vert; // the vertex
         int distTo; // distance to this vertex
         DijkstraVertex* prevVertex; // DijkstraVertex that brought you to this one
-        bool isFinished;
     public:
-        DijkstraVertex() : vert(0), distTo(INT_MAX), prevVertex(0), isFinished(false) {}
-        DijkstraVertex(LabelType label) : vert(label), distTo(INT_MAX), prevVertex(0), isFinished(false) {}
+        DijkstraVertex(LabelType label) : vert(label), distTo(INT_MAX), prevVertex(0) {}
+
         void setDist(int d) {distTo = d; }
-        void setPrev(DijkstraVertex& pv) {prevVertex = pv; }
+        void setPrev(DijkstraVertex* pv) {prevVertex = pv; }
+        int getDist() const { return distTo; }
+        DijkstraVertex* getPrev() const { return prevVertex; }
         Vertex<LabelType> getVertex() const {return vert; }
         LabelType getLabel() const {return vert.getLabel(); }
     };
 
 private:
     DijkstraVertex* startPoint;
-    DijkstraVertex* endPoint;
+    LabelType endPoint;
 
-    vector<DijkstraVertex* > finishedVertices; // store dynamically
-    vector<DijkstraVertex* > unfinishedVertices; // store dynamically
+    vector<DijkstraVertex* > finishedVertices; // stored dynamically
+    vector<DijkstraVertex* > unfinishedVertices; // stored dynamically
+                                                 // they might all contain the same pointers, check memory leaks later
 
-    //bool applyDijkstra();
+    bool applyDijkstra();
 
 public:
     Dijkstra();
-    Dijkstra(const Dijkstra<LabelType>&);
     ~Dijkstra();
 
     bool add(LabelType start, LabelType end, int edgeWeight = 0);
     bool remove(LabelType start, LabelType end);
-    void undo();
 
     bool setStartPoint(LabelType);
     bool setEndPoint(LabelType);
 
-    int distanceTo(LabelType) const;
+    int distanceTo(LabelType);
 
     void writeToFile(ofstream&) const;
-
-    bool applyDijkstra();
 };
 
 template <class LabelType>
 Dijkstra<LabelType>::Dijkstra()
 {
     startPoint = 0;
-    endPoint = 0;
 }
 
 template <class LabelType>
 Dijkstra<LabelType>::~Dijkstra()
 {
     delete startPoint;
-    delete endPoint;
 }
 
 template <class LabelType>
 bool Dijkstra<LabelType>::applyDijkstra()
 {
-    // unfinished vertices is filled with dij vertecices
+    // unfinished vertices is filled with dij vertices
+    // test if need to reset distTo INT_MAX every time, between multiple changes/applyDijkstra's
 
     // startPoint has not been set
     if(!startPoint)
         return false;
 
     startPoint->setDist(0);
-    finishedVertices.push_back(startPoint);
+    finishedVertices.push_back(startPoint); // start at start point, then push back closest neighbor as dijVert
 
+    Vertex<LabelType>* currentVertex;
     int numNeighbors = 0;
+    Vertex<LabelType>* neighborVertex;
 
-    //while(finishedVertices.size() < unfinishedVertices.size()) {
-        numNeighbors = this->vertices.getItem(finishedVertices.back()->getLabel())->getNumberOfNeighbors();
+    DijkstraVertex* neighborDij;
+    DijkstraVertex* currentDij;
+
+    int j = 0;
+    while(finishedVertices.size() <= unfinishedVertices.size()) {
+
+        currentVertex = this->vertices.getItem(finishedVertices.back()->getLabel());
+
+        numNeighbors = currentVertex->getNumberOfNeighbors();
+        currentVertex->resetNeighbor();
+
+        // cout << currentVertex->getLabel() << endl;
         for(int i = 0; i < numNeighbors; i++) {
-            // for each unfinished neighbor, update distance/prev vertex
+            neighborVertex = this->vertices.getItem(currentVertex->getNextNeighbor());
+
+            // find dijVertex that = neighborVertex
+            for(unsigned k = 0; k < unfinishedVertices.size(); k++)
+                if(unfinishedVertices[k]->getLabel() == neighborVertex->getLabel())
+                    neighborDij = unfinishedVertices[k];
+            currentDij = finishedVertices.back();
+
+            // if distTo dijVertex[current] + edgeWeight(current to neighbor) < dijVertex[neighbor]
+            // update dijVertex[neighbor]: prevVertex, and distTo
+            if(currentDij->getDist() + currentVertex->getEdgeWeight(neighborVertex->getLabel()) < neighborDij->getDist()) {
+                neighborDij->setDist(currentDij->getDist() + currentVertex->getEdgeWeight(neighborVertex->getLabel()));
+                neighborDij->setPrev(currentDij);
+            }
+
+            // cout << neighborVertex->getLabel() << " ";
+            // cout << neighborDij->getDist() << ": from " << neighborDij->getPrev()->getLabel() << endl;
         }
-    //}
+        // cout << endl << endl;
+
+        // then push_back to finishedVertices
+        finishedVertices.push_back(unfinishedVertices[j++]);
+    }
+
+    startPoint->setDist(0);
+    startPoint->setPrev(startPoint);
 
     return false;
 }
@@ -115,16 +147,8 @@ bool Dijkstra<LabelType>::remove(LabelType start, LabelType end)
 {
     // document change with undoStack, then add() as usual
     // (change later if Dijkstra::add() requires it)
-    // removed from un/finishedVertices as well
 
     return LinkedGraph<LabelType>::remove(start, end);
-}
-
-template <class LabelType>
-void Dijkstra<LabelType>::undo()
-{
-    // peek most recent addition to the undoStack
-    // and apply opposite(add/remove) to graph, then pop stack
 }
 
 template <class LabelType>
@@ -136,26 +160,35 @@ bool Dijkstra<LabelType>::setStartPoint(LabelType startP)
     return false;
 }
 
-// may not need
 template <class LabelType>
 bool Dijkstra<LabelType>::setEndPoint(LabelType endP)
 {
-
-    return false;
+    if(!this->vertices.contains(endP)) {
+        return false;
+    }
+    endPoint = endP;
+    return true;
 }
 
 template <class LabelType>
-int Dijkstra<LabelType>::distanceTo(LabelType x) const
+int Dijkstra<LabelType>::distanceTo(LabelType x)
 {
-    // check if x is in the graph
-    // then retrieve correct distance from startPoint to x
-
+    applyDijkstra();
+    for(unsigned i = 0; i < finishedVertices.size(); i++) {
+        if(finishedVertices[i]->getLabel() == x) {
+            return finishedVertices[i]->getDist();
+        }
+    }
+    // not found
     return -1;
 }
 
 template <class LabelType>
 void Dijkstra<LabelType>::writeToFile(ofstream& fout) const
 {
+    // Write the path taken to endPoint, use finished vertices, following prevVertex
+
+
     fout << "Dijkstra write to file. " << endl;
 }
 
