@@ -87,6 +87,7 @@ public:
    void depthFirstTraversal(LabelType start, void visit(LabelType&));
    void breadthFirstTraversal(LabelType start, void visit(LabelType&));
 
+   void undo();
    virtual void writeToFile(ofstream&) const;
 };
 
@@ -300,6 +301,13 @@ findOrCreateVertex(const LabelType& vertexLabel)
 
    return theVertex;
 }  // end findOrCreateVertex
+
+template <class LabelType>
+void LinkedGraph<LabelType>::undo()
+{
+    // peek most recent addition to the undoStack
+    // and apply opposite(add/remove) to graph, then pop stack
+}
 
 // WRITE THE MEMBER FUNCTION HERE TO
    //         WRITE THE GRAPH TO A TEXT FILE (SUGGEST TO PASS AN
