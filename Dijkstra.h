@@ -15,30 +15,30 @@ class Dijkstra : public LinkedGraph<LabelType>
 {
     // nested class for Dijkstra vertex
     // keep track of previous vertex in path, and distance to there
-    template <class ItemType>
     class DijkstraVertex
     {
     private:
-        Vertex<ItemType> vert; // the vertex
+        Vertex<LabelType> vert; // the vertex
         int distTo; // distance to this vertex
-        DijkstraVertex prevVertex; // DijkstraVertex that brought you to this one
+        DijkstraVertex* prevVertex; // DijkstraVertex that brought you to this one
         bool isFinished;
     public:
+        DijkstraVertex() : vert(0), distTo(INT_MAX), prevVertex(0), isFinished(false) {}
         DijkstraVertex(LabelType label) : vert(label), distTo(INT_MAX), prevVertex(0), isFinished(false) {}
         void setDist(int d) {distTo = d; }
         void setPrev(DijkstraVertex& pv) {prevVertex = pv; }
+        Vertex<LabelType> getVertex() const {return vert; }
+        LabelType getLabel() const {return vert.getLabel(); }
     };
 
 private:
-    DijkstraVertex<LabelType> startPoint;
-    DijkstraVertex<LabelType> endPoint;
+    DijkstraVertex* startPoint;
+    DijkstraVertex* endPoint;
 
-    vector<DijkstraVertex<LabelType>* > finishedVertices; // store dynamically
-    vector<DijkstraVertex<LabelType>* > unfinishedVertices; // store dynamically
+    vector<DijkstraVertex* > finishedVertices; // store dynamically
+    vector<DijkstraVertex* > unfinishedVertices; // store dynamically
 
-    void prepareVertices(LabelType& x);
-
-    bool applyDijkstra();
+    //bool applyDijkstra();
 
 public:
     Dijkstra();
@@ -55,32 +55,44 @@ public:
     int distanceTo(LabelType) const;
 
     void writeToFile(ofstream&) const;
+
+    bool applyDijkstra();
 };
 
 template <class LabelType>
 Dijkstra<LabelType>::Dijkstra()
 {
-
+    startPoint = 0;
+    endPoint = 0;
 }
 
 template <class LabelType>
 Dijkstra<LabelType>::~Dijkstra()
 {
-
-}
-
-template <class LabelType>
-void Dijkstra<LabelType>::prepareVertices(LabelType& x)
-{
-    unfinishedVertices.push_back(new DijkstraVertex<LabelType>(x));
+    delete startPoint;
+    delete endPoint;
 }
 
 template <class LabelType>
 bool Dijkstra<LabelType>::applyDijkstra()
 {
-    this->depthFirstTraversal(startPoint, prepareVertices);
-    // now unfinishedVertices is filled with pointers to DijkstraVertices
+    // unfinished vertices is filled with dij vertecices
 
+    // startPoint has not been set
+    if(!startPoint)
+        return false;
+
+    startPoint->setDist(0);
+    finishedVertices.push_back(startPoint);
+
+    int numNeighbors = 0;
+
+    //while(finishedVertices.size() < unfinishedVertices.size()) {
+        numNeighbors = this->vertices.getItem(finishedVertices.back()->getLabel())->getNumberOfNeighbors();
+        for(int i = 0; i < numNeighbors; i++) {
+            // for each unfinished neighbor, update distance/prev vertex
+        }
+    //}
 
     return false;
 }
@@ -90,6 +102,10 @@ bool Dijkstra<LabelType>::add(LabelType start, LabelType end, int edgeWeight)
 {
     // document change with undoStack, then add() as usual
     // (modify later if Dijkstra::add() requires it)
+    if(!this->vertices.contains(start))
+        unfinishedVertices.push_back(new DijkstraVertex(start));
+    if(!this->vertices.contains(end))
+        unfinishedVertices.push_back(new DijkstraVertex(end));
 
     return LinkedGraph<LabelType>::add(start, end, edgeWeight);
 }
@@ -99,6 +115,7 @@ bool Dijkstra<LabelType>::remove(LabelType start, LabelType end)
 {
     // document change with undoStack, then add() as usual
     // (change later if Dijkstra::add() requires it)
+    // removed from un/finishedVertices as well
 
     return LinkedGraph<LabelType>::remove(start, end);
 }
@@ -113,16 +130,17 @@ void Dijkstra<LabelType>::undo()
 template <class LabelType>
 bool Dijkstra<LabelType>::setStartPoint(LabelType startP)
 {
-    // check if it's valid
-    // then set
+    if(!this->vertices.contains(startP))
+        return false;
+    startPoint = new DijkstraVertex(startP);
     return false;
 }
 
+// may not need
 template <class LabelType>
 bool Dijkstra<LabelType>::setEndPoint(LabelType endP)
 {
-    // check if it's valid
-    // then set
+
     return false;
 }
 
