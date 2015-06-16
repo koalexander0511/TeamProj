@@ -9,16 +9,16 @@ private:
 	string city;
 public:
 	Airport()									{ airport = "???"; city = "Unknown_City"; }
-	Airport(string a, string c)					{ airpot = a; city = c; }
-	Airport(const Airport& airport)				{ airport = airport.getAirport(); city = airport.getCity(); }
-	string getAirport()							{ return airport; }
-	string getCity()							{ return city; }
+	Airport(string a, string c)					{ airport = a; city = c; }
+	Airport(const Airport& airport)				{ this->airport = airport.getAirport(); this->city = airport.getCity(); }
+	string getAirport()	const					{ return airport; }
+	string getCity() const						{ return city; }
 	void setAirport(string str)					{ airport = str; }
 	void setCity(string str)					{ city = str; }
-	operator=(Airport& left, Airport& right)	{ left.setAirport(right.getAirport); left.setCity(right.getCity); }
-	bool operator==(const Airport& left, const Aiport& right);
-	friend ostream & operator<<(ostream & os, const Airport &right);
+	Airport& operator=(Airport& right);
+	bool operator==(const Airport& right);
 
+	friend ostream & operator<<(ostream & os, const Airport &right);
 };
 
 ostream & operator<<(ostream & os, const Airport &right)
@@ -26,9 +26,16 @@ ostream & operator<<(ostream & os, const Airport &right)
 	os << right.airport << " " << right.city << endl;
 	return os;
 }
-bool Airport::operator==(const Airport& left, const Aiport& right)
+
+Airport& Airport::operator=(Airport& right)
 {
-	if (left.getAirport() == right.getAirport() && left.getCity() == right.getCity())
+	setAirport(right.getAirport());
+	setCity(right.getCity());
+	return right;
+}
+bool Airport::operator==(const Airport& right)
+{
+	if (airport == right.getAirport() && city == right.getCity())
 		return true;
 	else
 		return false;
