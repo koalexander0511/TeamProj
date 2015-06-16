@@ -14,20 +14,22 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
 #include "LinkedGraph.h"
 #include "Dijkstra.h"
+#include "Airport.h"
 
 using namespace std;
 
-typedef Airport *T;
+typedef Dijkstra<Airport> *T;
 
 void displayMenu();
 void createGraph(T &t);
 
 template<class ItemType>
-void ReadFromFile(string filename, Graph<ItemType> &graph){
+void ReadFromFile(string filename, Dijkstra<Airport> &graph){
 	ifstream infile;
-	infile.open(filename);
+	infile.open(filename.c_str());
 	if (infile.fail()){
 		exit(1);
 	}
@@ -51,14 +53,14 @@ int main()
    int choice;
    T sname, ename;
    T weight;
-   
+
    /*
    PSUDOCODE FOR CREATING A GRAPH FROM INPUT FILE.
 
    T airport1, airport2;
    string tempPort, tempCity;
    int dist;
-   
+
    fstream fin;
    fin.open(INPUTFILE);
 
