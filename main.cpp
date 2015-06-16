@@ -73,7 +73,7 @@ int main()
 		fin >> tempCity;
 		airport2 = new Airport(tempPort,tempCity);
 		fin >> dist;
-		Dijkstra->add(airport1,airport2,dist);
+		Flights->add(airport1,airport2,dist);
    }
    */
 
