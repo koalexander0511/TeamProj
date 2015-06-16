@@ -162,20 +162,6 @@ int main()
 
 		case 8: //find the shorted path between two vertices
 		{
-<<<<<<< HEAD
-			/*cout << "Enter the starting vertex: ";
-			cin >> vname;
-			cout << "Enter the ending vertex: ";
-			cin >> vname2;
-			int result1 = g1->Search(vname);
-			int result2 = g1->Search(vname2);
-			if (result1 == -1 || result2 == -1){
-				cout << "Error: Invalid vertices" << endl;
-			}
-			else{
-				g1->FindShortestPath(vname, vname2);
-			}*/
-=======
 			cout << "Enter the starting vertex(airport city): ";
 			cin >> sAirport >> sCity;
 			cout << "Enter the ending vertex(airport city): ";
@@ -196,7 +182,6 @@ int main()
 				g1->distanceTo(tempAirport2);
 				// g1->printShortestPath(); // add this function to dijkstra?
 			}
->>>>>>> origin/master
 			break;
 		}
 
