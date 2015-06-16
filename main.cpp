@@ -162,7 +162,7 @@ int main()
 
 		case 8: //find the shorted path between two vertices
 		{
-			cout << "Enter the starting vertex: ";
+			/*cout << "Enter the starting vertex: ";
 			cin >> vname;
 			cout << "Enter the ending vertex: ";
 			cin >> vname2;
@@ -173,7 +173,7 @@ int main()
 			}
 			else{
 				g1->FindShortestPath(vname, vname2);
-			}
+			}*/
 			break;
 		}
 
@@ -184,7 +184,7 @@ int main()
 		case 10: // write to file
 			while (!openOutputFile(fout));
 			g1->writeToFile(fout);
-			fout.close;
+			fout.close();
 			break;
 
 		case 11: //exit testing
