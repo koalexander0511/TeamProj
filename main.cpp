@@ -96,11 +96,21 @@ int main()
 			g1->breadthFirstTraversal();
 			break;
 		case 5: //remove an edge
-			cout << "Enter the starting vertex: ";
-			cin >> sname;
-			cout << "Enter the ending vertex: ";
-			cin >> ename;
-			g1->remove(sname, ename);
+			string tempPort, tempCity;
+			Airport *port1, *port2;
+			cout << "Enter the starting Airport(3 capital letters): ";
+			cin >> tempPort;
+			cout << "Enter the starting City:";
+			getline(cin, tempCity);
+			port1 = new Airport(tempPort, tempCity);
+			cout << "Enter the ending Airport(3 capital letters):";
+			cin >> tempPort;
+			cout << "Enter the ending city:";
+			getline(cin, tempCity);
+			port2 = new Airport(tempPort, tempCity);
+			g1->remove(*port1, *port2);
+			delete port1;
+			delete port2;
 			break;
 		case 6: //get the number of vertices
 			cout << "The number of vertices in the graph = " << g1->GetSize() << endl; // ???????
