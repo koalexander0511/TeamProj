@@ -96,11 +96,15 @@ int main()
 			g1->breadthFirstTraversal();
 			break;
 		case 5: //remove an edge
-			cout << "Enter the starting vertex: ";
-			cin >> sname;
-			cout << "Enter the ending vertex: ";
-			cin >> ename;
-			g1->remove(sname, ename);
+			cout << "Enter the start vertex(airport city): ";
+			cin >> sAirport >> sCity;
+			cout << "Enter the end vertex(airport city): ";
+			cin >> eAirport >> eCity;
+			tempAirport1.setAirport(sAirport);
+			tempAirport1.setCity(sCity);
+			tempAirport2.setAirport(eAirport);
+			tempAirport2.setCity(eCity);
+			g1->remove(tempAirport1, tempAirport2);
 			break;
 		case 6: //get the number of vertices
 			cout << "The number of vertices in the graph = " << g1->GetSize() << endl; // ???????
