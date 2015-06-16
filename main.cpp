@@ -25,6 +25,8 @@ typedef Dijkstra<Airport> *T;
 
 void displayMenu();
 void createGraph(T &t);
+void displayAirport(Airport& port);
+
 
 template<class ItemType>
 void ReadFromFile(string filename, Dijkstra<Airport> &graph){
@@ -203,5 +205,7 @@ void displayMenu()
 	cout << 11 << ": Exit the program." << endl << endl;
 
 }
-
-
+void displayAirport(Airport& port)
+{
+	cout << port;
+}
