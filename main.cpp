@@ -48,11 +48,11 @@ int main()
 
    cout << "Testing Graph . . . ." << endl << endl ;
    //graphTest(myGraph);
-   T g1;
+   T g1 = new Dijkstra<Airport>();
    bool done = false;
    int choice;
-   T sname, ename;
-   T weight;
+   string sname, ename;
+   int weight;
 
    /*
    PSUDOCODE FOR CREATING A GRAPH FROM INPUT FILE.
@@ -170,12 +170,10 @@ int main()
 	cout << "Done with testing!" << endl;
 	cin.get();
 	cin.get();
+
+	delete g1;
 	return 0;
 }
-
-
-   return 0;
-}  // end main
 
 // display menu
 void displayMenu()
@@ -196,41 +194,6 @@ void displayMenu()
 	cout << 11 << ": Exit the program." << endl << endl;
 
 }
-/*
- Testing Graph . . . .
 
- Vertices :14
- Edges :14
 
- Depth-first traversal (should be A B E F J C G K L D H M I N):
- Displaying item - A
- Displaying item - B
- Displaying item - E
- Displaying item - F
- Displaying item - J
- Displaying item - C
- Displaying item - G
- Displaying item - K
- Displaying item - L
- Displaying item - D
- Displaying item - H
- Displaying item - M
- Displaying item - I
- Displaying item - N
 
- Breadth-first traversal (should be A B C D E F G H I J K L M N):
- Displaying item - A
- Displaying item - B
- Displaying item - C
- Displaying item - D
- Displaying item - E
- Displaying item - F
- Displaying item - G
- Displaying item - H
- Displaying item - I
- Displaying item - J
- Displaying item - K
- Displaying item - L
- Displaying item - M
- Displaying item - N
-*/
