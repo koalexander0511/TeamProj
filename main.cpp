@@ -1,14 +1,4 @@
-//Test
-
-/*
-    CIS 22C Team 4 Project: Dijkstra's algorithm (shortest path)
-
-    12 June 2015
-*/
-
-//  Created by Frank M. Carrano and Tim Henry.
-//  Copyright (c) 2013 __Pearson Education__. All rights reserved.
-//
+// CIS 22C Team 4 Project: Dijkstra's algorithm (shortest path)
 // Program Edited by Ko Outlaw-Spruell, James Hinds, and Victoriia Petrusha
 
 
@@ -27,22 +17,6 @@ void displayMenu();
 void createGraph(T &t);
 void displayAirport(Airport& port);
 
-
-template<class ItemType>
-void ReadFromFile(string filename, Dijkstra<Airport> &graph){
-	ifstream infile;
-	infile.open(filename.c_str());
-	if (infile.fail()){
-		exit(1);
-	}
-	// not sure exactly what goes in here
-
-	infile.close();
-}
-void display(string& anItem)
-{
-   cout << "Displaying item - " << anItem << endl;
-}
 int main()
 {
    T g1 = new Dijkstra<Airport>();
@@ -53,9 +27,6 @@ int main()
    int weight;
    Airport tempAirport1;
    Airport tempAirport2;
-
-   /*
-   PSUDOCODE FOR CREATING A GRAPH FROM INPUT FILE.
 
    T airport1, airport2;
    string tempPort, tempCity;
@@ -75,9 +46,8 @@ int main()
 		fin >> dist;
 		Flights->add(airport1,airport2,dist);
    }
-   */
 
-   createGraph(g1); //create a graph from input file
+   createGraphFromFile(fin); //create a graph from input file
 
 	do {
 		displayMenu();
