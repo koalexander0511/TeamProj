@@ -105,29 +105,29 @@ int main()
 			tempAirport2.setAirport(eAirport);
 			tempAirport2.setCity(eCity);
 
-			g1.add(tempAirport1, tempAirport2, weight);
+			g1->add(tempAirport1, tempAirport2, weight);
 			break;
 		case 3: //display the graph depth traversal
-			g1.depthFirstTraversal();
+			g1->depthFirstTraversal();
 			break;
 		case 4: //display the graph breadth traversal
-			g1.breadthFirstTraversal();
+			g1->breadthFirstTraversal();
 			break;
 		case 5: //remove an edge
 			cout << "Enter the starting vertex: ";
 			cin >> sname;
 			cout << "Enter the ending vertex: ";
 			cin >> ename;
-			g1.remove(sname, ename);
+			g1->remove(sname, ename);
 			break;
 		case 6: //get the number of vertices
-			cout << "The number of vertices in the graph = " << g1.GetSize() << endl; // ???????
+			cout << "The number of vertices in the graph = " << g1->GetSize() << endl; // ???????
 			break;
 		case 7: //search for a certain vertex
 		{
 					 cout << "Enter a vertex: ";
 					 cin >> sname;
-					 int result = g1.Search(sname);
+					 int result = g1->Search(sname);
 					 if (result == -1)
 						 cout << "Vertex " << sname << " does not exist in the graph";
 					 else
@@ -143,13 +143,13 @@ int main()
 					 cin >> vname;
 					 cout << "Enter the ending vertex: ";
 					 cin >> vname2;
-					 int result1 = g1.Search(vname);
-					 int result2 = g1.Search(vname2);
+					 int result1 = g1->Search(vname);
+					 int result2 = g1->Search(vname2);
 					 if (result1 == -1 || result2 == -1){
 						 cout << "Error: Invalid vertices" << endl;
 					 }
 					 else{
-						 g1.FindShortestPath(vname, vname2);
+						 g1->FindShortestPath(vname, vname2);
 					 }
 					 break;
 		}
