@@ -37,7 +37,6 @@ private:
 
     vector<DijkstraVertex* > finishedVertices; // stored dynamically
     vector<DijkstraVertex* > unfinishedVertices; // stored dynamically
-                                                 // they might all contain the same pointers, check memory leaks later
 
     bool applyDijkstra();
 
@@ -66,7 +65,12 @@ template <class LabelType>
 Dijkstra<LabelType>::~Dijkstra()
 {
     // delete the contents of unfinishedVertices and finishedVertices
-
+	for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
+		delete unfinishedVertices[i];
+	}
+	for (unsigned i = 0; i < finishedVertices.size(); i++) {
+		delete finishedVertices[i];
+	}
     delete startPoint;
 }
 
@@ -103,6 +107,7 @@ bool Dijkstra<LabelType>::applyDijkstra()
             neighborVertex = this->vertices.getItem(currentVertex->getNextNeighbor());
 
             // find dijVertex that = neighborVertex
+			neighborDij = 0;
             for(unsigned k = 0; k < unfinishedVertices.size(); k++)
                 if(unfinishedVertices[k]->getLabel() == neighborVertex->getLabel())
                     neighborDij = unfinishedVertices[k];
@@ -157,7 +162,9 @@ bool Dijkstra<LabelType>::setStartPoint(LabelType startP)
 {
     if(!this->vertices.contains(startP))
         return false;
-    startPoint = new DijkstraVertex(startP);
+	delete startPoint;
+    startPoint = new DijkstraVertex(startP); // posibly change this to delete previous startPoint or, 
+											 // not use new but point to another existing value
     return false;
 }
 
