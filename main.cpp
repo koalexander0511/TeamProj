@@ -109,8 +109,6 @@ int main()
 			g1->breadthFirstTraversal(tempAirport1, displayAirport);
 			break;
 		case 5: //remove an edge
-
-		case 5: //remove an edge
 			string tempPort, tempCity;
 			Airport *port1, *port2;
 			cout << "Enter the starting Airport(3 capital letters): ";
