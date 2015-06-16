@@ -6,7 +6,6 @@
 #include <vector>
 #include "LinkedGraph.h"
 #include "Vertex.h"
-#include "Edge.h"
 
 using namespace std;
 
@@ -66,6 +65,8 @@ Dijkstra<LabelType>::Dijkstra()
 template <class LabelType>
 Dijkstra<LabelType>::~Dijkstra()
 {
+    // delete the contents of unfinishedVertices and finishedVertices
+
     delete startPoint;
 }
 
