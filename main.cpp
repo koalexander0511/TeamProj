@@ -124,6 +124,7 @@ int main()
 			g1->remove(*port1, *port2);
 			delete port1;
 			delete port2;
+			break;
 		case 6: //get the number of vertices
 			cout << "The number of vertices in the graph = " << g1->getNumVertices() << endl;
 			break;
