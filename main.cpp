@@ -14,12 +14,15 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <vector>
 #include "LinkedGraph.h"
 #include "Dijkstra.h"
+#include "Airport.h"
 
 using namespace std;
 
-typedef Airport *T;
+typedef Dijkstra<Airport> * T;
 
 void displayMenu();
 void createGraph(T &t);
@@ -32,55 +35,17 @@ void ReadFromFile(string filename, Graph<ItemType> &graph){
 		exit(1);
 	}
 	// not sure exactly what goes in here
-
+	while (!infile.eof()){
+		string str;
+		infile >> str;
+	}
 	infile.close();
 }
+
 void display(string& anItem)
 {
    cout << "Displaying item - " << anItem << endl;
 }
-
-void graphTest(LinkedGraph<string>* testGraph)
-{
-   string A("A");
-   string B("B");
-   string C("C");
-   string D("D");
-   string E("E");
-   string F("F");
-   string G("G");
-   string H("H");
-   string I("I");
-   string J("J");
-   string K("K");
-   string L("L");
-   string M("M");
-   string N("N");
-
-   testGraph->add(A, B, 0);
-   testGraph->add(A, C, 0);
-   testGraph->add(A, D, 0);
-   testGraph->add(B, E, 0);
-   testGraph->add(B, F, 0);
-   testGraph->add(C, G, 0);
-   testGraph->add(D, H, 0);
-   testGraph->add(D, I, 0);
-   testGraph->add(F, J, 0);
-   testGraph->add(G, K, 0);
-   testGraph->add(G, L, 0);
-   testGraph->add(H, M, 0);
-   testGraph->add(I, M, 0);
-   testGraph->add(I, N, 0);
-
-   cout << "Vertices :" << testGraph->getNumVertices() << endl;
-   cout << "Edges :" << testGraph->getNumEdges() << endl;
-
-   cout << "\nDepth-first traversal (should be A B E F J C G K L D H M I N):" << endl;
-   testGraph->depthFirstTraversal(A, display);
-
-   cout << "\nBreadth-first traversal (should be A B C D E F G H I J K L M N):" << endl;
-   testGraph->breadthFirstTraversal(A, display);
-}  // end graphTest
 
 int main()
 {
@@ -116,34 +81,37 @@ int main()
 			cin >> weight;
 			g1.add(sname, ename, weight);
 			break;
-		case 3: //display vertices in the graph
-			g1.DisplayVertices();
+		//case 3: //display vertices in the graph
+			//g1.DisplayVertices();
+			//break;
+		case 4: //display the graph depth traversal
+			g1.depthFirstTraversal();
 			break;
-		case 4: //display the graph
-			g1.DisplayGraph();
+		case 5: //display the graph breadth traversal
+			g1.breadthFirstTraversal();
 			break;
-		case 5: //remove an edge
+		case 6: //remove
 			cout << "Enter the starting vertex: ";
 			cin >> sname;
 			cout << "Enter the ending vertex: ";
 			cin >> ename;
 			g1.remove(sname, ename);
 			break;
-		case 6: //get the number of vertices
-			cout << "The number of vertices in the graph = " << g1.GetSize() << endl; // ???????
+		case 7: //get the number of vertices
+			cout << "The number of vertices in the graph = " << g1.getNumVertices() << endl; // ???????
 			break;
-		case 7: //search for a certain vertex
-		{
-					 cout << "Enter a vertex: ";
-					 cin >> sname;
-					 int result = g1.Search(sname);
-					 if (result == -1)
-						 cout << "Vertex " << sname << " does not exist in the graph";
-					 else
-						 cout << "Vertex " << sname << " found in the graph";
-					 cout << endl;
-					 break;
-		}
+		//case 8: //search for a certain vertex
+		//{
+					 //cout << "Enter a vertex: ";
+					 //cin >> sname;
+					 //int result = g1.Search(sname);
+					 //if (result == -1)
+						 //cout << "Vertex " << sname << " does not exist in the graph";
+					// else
+						 //cout << "Vertex " << sname << " found in the graph";
+					 //cout << endl;
+					// break;
+		//}
 		
 		
 		case 8: //find the shorted path between two vertices
@@ -152,13 +120,13 @@ int main()
 					 cin >> vname;
 					 cout << "Enter the ending vertex: ";
 					 cin >> vname2;
-					 int result1 = g1.Search(vname);
-					 int result2 = g1.Search(vname2);
+					 int result1 = g1.Search(sname);
+					 int result2 = g1.Search(ename);
 					 if (result1 == -1 || result2 == -1){
 						 cout << "Error: Invalid vertices" << endl;
 					 }
 					 else{
-						 g1.FindShortestPath(vname, vname2);
+						 g1.FindShortestPath(sname, ename);
 					 }
 					 break;
 		}
@@ -168,7 +136,7 @@ int main()
 			break;
 		
 		case 10: // write to file
-			cout << "Enter the file name: ";
+		    cout << "Enter the file name: ";
 			cin >> fName;
 			writeToFile(fName, g1);
 			break;
@@ -190,8 +158,6 @@ int main()
 	cin.get();
 	return 0;
 }
-
-
    return 0;
 }  // end main
 
@@ -203,52 +169,15 @@ void displayMenu()
 
 	cout << order++ << ": Show the menu." << endl;
 	cout << order++ << ": Add to Graph." << endl;
-	cout << order++ << ": Display vertices." << endl;
-	cout << order++ << ": Display the graph." << endl;
+	cout << order++ << ": Display the graph Depth Traversal." << endl;
+	cout << order++ << ": Display the graph Breadth Traversal." << endl;
 	cout << order++ << ": Remove from graph." << endl;
 	cout << order++ << ": Get the number of vertices in the graph." << endl;
-	cout << order++ << ": Search for a certain vertex." << endl;
+	//cout << order++ << ": Search for a certain vertex." << endl;
 	cout << order++ << ": Find the shortest path between two vertices." << endl;
-	cout << order++ << ": Undo last chnge." << endl;
-	cout << order++ << ": Write graph to file." << endl;
+	cout << order++ << ": Undo last change." << endl;
+	//cout << order++ << ": Write graph to file." << endl;
 	cout << 11 << ": Exit the program." << endl << endl;
 
 }
-/*
- Testing Graph . . . .
 
- Vertices :14
- Edges :14
-
- Depth-first traversal (should be A B E F J C G K L D H M I N):
- Displaying item - A
- Displaying item - B
- Displaying item - E
- Displaying item - F
- Displaying item - J
- Displaying item - C
- Displaying item - G
- Displaying item - K
- Displaying item - L
- Displaying item - D
- Displaying item - H
- Displaying item - M
- Displaying item - I
- Displaying item - N
-
- Breadth-first traversal (should be A B C D E F G H I J K L M N):
- Displaying item - A
- Displaying item - B
- Displaying item - C
- Displaying item - D
- Displaying item - E
- Displaying item - F
- Displaying item - G
- Displaying item - H
- Displaying item - I
- Displaying item - J
- Displaying item - K
- Displaying item - L
- Displaying item - M
- Displaying item - N
-*/
