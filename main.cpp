@@ -27,6 +27,15 @@ bool openInputFile(ifstream &ifs) //function that asks the user to enter a file 
 	ifs.open(filename.c_str());
 	return ifs.is_open();
 }
+bool openOutputFile(ofstream &fout) //function that asks the user to enter a file name. Opens the file, and returns true if it worked.
+{
+	string filename; // temp storage for user input. Stores the name of the file that the user wants to open
+
+	cout << "Enter the output filename: ";
+	getline(cin, filename);
+	fout.open(filename.c_str());
+	return fout.is_open();
+}
 void createGraphFromFile(ifstream &fin, T &map)
 {
 	Airport *airport1, *airport2;
@@ -61,9 +70,16 @@ int main()
 	Airport tempAirport1;
 	Airport tempAirport2;
 
+	ofstream fout;
 	ifstream fin;
 	while (openInputFile(fin));
 	createGraphFromFile(fin, g1);
+	fin.close();
+
+	string fname;
+
+	string tempPort, tempCity;
+	Airport *port1, *port2;
 
 	do {
 		displayMenu();
@@ -109,8 +125,7 @@ int main()
 			g1->breadthFirstTraversal(tempAirport1, displayAirport);
 			break;
 		case 5: //remove an edge
-			string tempPort, tempCity;
-			Airport *port1, *port2;
+			
 			cout << "Enter the starting Airport(3 capital letters): ";
 			cin >> tempPort;
 			cout << "Enter the starting City:";
@@ -167,9 +182,9 @@ int main()
 			break;
 
 		case 10: // write to file
-			cout << "Enter the file name: ";
-			cin >> fName;
-			writeToFile(fName, g1);
+			while (!openOutputFile(fout));
+			g1->writeToFile(fout);
+			fout.close;
 			break;
 
 		case 11: //exit testing
