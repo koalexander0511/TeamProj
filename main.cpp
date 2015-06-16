@@ -1,7 +1,5 @@
 // CIS 22C Team 4 Project: Dijkstra's algorithm (shortest path)
 // Program Edited by Ko Outlaw-Spruell, James Hinds, and Victoriia Petrusha
-
-
 #include <iostream>
 #include <string>
 #include <cstdlib>
