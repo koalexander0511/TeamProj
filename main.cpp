@@ -57,6 +57,7 @@ int main()
    string sCity, eCity;
    string sAirport, eAirport;
    int weight;
+
    Airport tempAirport1;
    Airport tempAirport2;
 
@@ -90,10 +91,22 @@ int main()
 			g1->add(tempAirport1, tempAirport2, weight);
 			break;
 		case 3: //display the graph depth traversal
-			g1->depthFirstTraversal();
+		    // Enter starting point for traversal
+		    cout << "Enter the start vertex(airport city): ";
+			cin >> sAirport >> sCity;
+			tempAirport1.setAirport(sAirport);
+			tempAirport1.setCity(sCity);
+
+			g1->depthFirstTraversal(tempAirport1, displayAirport);
 			break;
 		case 4: //display the graph breadth traversal
-			g1->breadthFirstTraversal();
+		    // Enter starting point for traversal
+		    cout << "Enter the start vertex(airport city): ";
+			cin >> sAirport >> sCity;
+			tempAirport1.setAirport(sAirport);
+			tempAirport1.setCity(sCity);
+
+			g1->breadthFirstTraversal(tempAirport1, displayAirport);
 			break;
 		case 5: //remove an edge
 			cout << "Enter the start vertex(airport city): ";
@@ -104,6 +117,7 @@ int main()
 			tempAirport1.setCity(sCity);
 			tempAirport2.setAirport(eAirport);
 			tempAirport2.setCity(eCity);
+
 			g1->remove(tempAirport1, tempAirport2);
 			break;
 		case 6: //get the number of vertices
