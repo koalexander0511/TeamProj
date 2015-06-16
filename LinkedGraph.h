@@ -37,7 +37,7 @@ protected: // protected so you can derive this class for you team project soluti
         LabelType item2;
         lastOperation lastOp;
     public:
-        UndoStackElement(lastOperation lo, const LabelType& a, const LabelType& b)
+        UndoStackElement(lastOperation lo, const LabelType a, const LabelType b)
         {lastOp = lo; item1 = a; item2 = b; }
         void applyUndo()
         {
