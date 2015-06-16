@@ -51,6 +51,29 @@ int main()
    int choice;
    T sname, ename;
    T weight;
+   
+   /*
+   PSUDOCODE FOR CREATING A GRAPH FROM INPUT FILE.
+
+   T airport1, airport2;
+   string tempPort, tempCity;
+   int dist;
+   
+   fstream fin;
+   fin.open(INPUTFILE);
+
+   Dijkstra* Flights;
+   while(fin >> tempPort)
+   {
+   		fin >> tempCity;
+		airport1 = new Airport(tempPort, tempCity);
+		fin >> tempPort;
+		fin >> tempCity;
+		airport2 = new Airport(tempPort,tempCity);
+		fin >> dist;
+		Dijkstra->add(airport1,airport2,dist);
+   }
+   */
 
    createGraph(g1); //create a graph from input file
 
