@@ -125,7 +125,7 @@ int main()
 			g1->breadthFirstTraversal(tempAirport1, displayAirport);
 			break;
 		case 5: //remove an edge
-			
+
 			cout << "Enter the starting Airport(3 capital letters): ";
 			cin >> tempPort;
 			cout << "Enter the starting City:";
@@ -186,13 +186,13 @@ int main()
 			tempAirport2.setAirport(eAirport);
 			tempAirport2.setCity(eCity);
 
-			int result1 = g1->seachVertex(tempAirport1);
+			int result1 = g1->searchVertex(tempAirport1);
 			int result2 = g1->searchVertex(tempAirport2);
 			if (result1 == -1 || result2 == -1) {
 				cout << "Error: Invalid vertices" << endl;
 			}
 			else{
-                g1->setStartPoint(tempAirport1)
+                g1->setStartPoint(tempAirport1);
 				g1->distanceTo(tempAirport2);
 				// g1->printShortestPath(); // add this function to dijkstra?
 			}
