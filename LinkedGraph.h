@@ -84,7 +84,7 @@ public:
    void breadthFirstTraversal(LabelType start, void visit(LabelType&));
 
    void undo();
-   int searchVertex(const LabelType&) const;
+   bool searchVertex(const LabelType&) const;
    virtual void writeToFile(ofstream&) const;
 };
 
@@ -106,7 +106,7 @@ LinkedGraph<LabelType>::~LinkedGraph()
         undoStack->pop();
     }
     delete undoStack;
-	// delete vertices?
+	// delete vertices ?
 	// vertices.clear(); ?
 }
 
@@ -320,6 +320,9 @@ void LinkedGraph<LabelType>::undo()
 {
     // peek most recent addition to the undoStack
     // and apply opposite(add/remove) to graph, then pop stack
+	if (!undoStack->size())
+		return;
+
     int lo = undoStack->peek()->getLastOperation();
     if(lo == UndoStackElement::ADD)
         remove(undoStack->peek()->getStartItem(), undoStack->peek()->getEndItem());
@@ -330,11 +333,11 @@ void LinkedGraph<LabelType>::undo()
 }
 
 template <class LabelType>
-int LinkedGraph<LabelType>::searchVertex(const LabelType& target) const
+bool LinkedGraph<LabelType>::searchVertex(const LabelType& target) const
 {
     if(vertices.contains(target))
-        return 1;
-    return -1;
+        return true;
+    return false;
 }
 
 // WRITE THE MEMBER FUNCTION HERE TO
