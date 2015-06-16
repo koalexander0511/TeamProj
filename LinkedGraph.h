@@ -48,7 +48,7 @@ protected: // protected so you can derive this class for you team project soluti
         }
     };
 
-    LinkedStack<LabelType>* undoStack; // move to LinkedGraph.h
+    LinkedStack<UndoStackElement*>* undoStack;
 
 
    int numberOfVertices;
@@ -88,6 +88,7 @@ public:
    void breadthFirstTraversal(LabelType start, void visit(LabelType&));
 
    void undo();
+   int searchVertex(const LabelType&);
    virtual void writeToFile(ofstream&) const;
 };
 
@@ -95,13 +96,18 @@ template<class LabelType>
 LinkedGraph<LabelType>::
 LinkedGraph(): numberOfVertices(0), numberOfEdges(0)
 {
-    undoStack = new LinkedStack<LabelType>();
+    undoStack = new LinkedStack<UndoStackElement*>();
+
 	pvertexIterator = 0;
 }  // end default constructor
 
 template<class LabelType>
 LinkedGraph<LabelType>::~LinkedGraph()
 {
+    // delete each undostack element
+    for(int i = 0; i < undoStack->size(); i++) {
+        undoStack->pop();
+    }
     delete undoStack;
 }
 
@@ -132,6 +138,9 @@ bool LinkedGraph<LabelType>::add(LabelType start, LabelType end, int edgeWeight)
 
 		return true;
    }
+
+   // add to undoStack
+
    return false;
 }  // end add
 
@@ -307,6 +316,14 @@ void LinkedGraph<LabelType>::undo()
 {
     // peek most recent addition to the undoStack
     // and apply opposite(add/remove) to graph, then pop stack
+}
+
+template <class LabelType>
+int LinkedGraph<LabelType>::searchVertex(const LabelType& target)
+{
+    if(vertices.contains(target))
+        return 1;
+    return -1;
 }
 
 // WRITE THE MEMBER FUNCTION HERE TO
