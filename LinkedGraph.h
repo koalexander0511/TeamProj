@@ -37,15 +37,11 @@ protected: // protected so you can derive this class for you team project soluti
         LabelType item2;
         lastOperation lastOp;
     public:
-        UndoStackElement(lastOperation lo, const LabelType a, const LabelType b)
+        UndoStackElement(lastOperation lo, LabelType a, LabelType b)
         {lastOp = lo; item1 = a; item2 = b; }
-        void applyUndo()
-        {
-            if(lastOp == ADD)
-                remove(item1, item2);
-            else if(lastOp == REMOVE)
-                add(item1, item2);
-        }
+        int getLastOperation() const {return lastOp; }
+        LabelType getStartItem() const {return item1; }
+        LabelType getEndItem() const {return item2; }
     };
 
     LinkedStack<UndoStackElement*>* undoStack;
@@ -321,7 +317,11 @@ void LinkedGraph<LabelType>::undo()
 {
     // peek most recent addition to the undoStack
     // and apply opposite(add/remove) to graph, then pop stack
-    undoStack->peek()->applyUndo();
+    int lo = undoStack->peek()->getLastOperation();
+    if(lo == UndoStackElement::ADD)
+        remove(undoStack->peek()->getStartItem(), undoStack->peek()->getEndItem());
+    else if(lo == UndoStackElement::REMOVE)
+        add(undoStack->peek()->getStartItem(), undoStack->peek()->getEndItem());
     undoStack->pop();
 }
 
