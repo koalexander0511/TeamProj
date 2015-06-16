@@ -17,8 +17,40 @@ void displayMenu();
 void createGraph(T &t);
 void displayAirport(Airport& port);
 
+
+bool openInputFile(ifstream &ifs) //function that asks the user to enter a file name. Opens the file, and returns true if it worked.
+{
+	string filename; // temp storage for user input. Stores the name of the file that the user wants to open
+
+	cout << "Enter the input filename: ";
+	getline(cin, filename);
+	ifs.open(filename.c_str());
+	return ifs.is_open();
+}
+void createGraphFromFile(ifstream &fin, T &map)
+{
+	Airport *airport1, *airport2;
+	string tempPort, tempCity;
+	int dist;
+
+	while (fin >> tempPort)
+	{
+		fin >> tempCity;
+		airport1 = new Airport(tempPort, tempCity);
+		fin >> tempPort;
+		fin >> tempCity;
+		airport2 = new Airport(tempPort, tempCity);
+		fin >> dist;
+		map->add(*airport1, *airport2, dist);
+	}
+}
 int main()
 {
+
+   //LinkedGraph<string>* myGraph = new LinkedGraph<string>();
+
+   cout << "Testing Graph . . . ." << endl << endl ;
+   //graphTest(myGraph);
    T g1 = new Dijkstra<Airport>();
    bool done = false;
    int choice;
@@ -28,26 +60,9 @@ int main()
    Airport tempAirport1;
    Airport tempAirport2;
 
-   T airport1, airport2;
-   string tempPort, tempCity;
-   int dist;
-
-   fstream fin;
-   fin.open(INPUTFILE);
-
-   Dijkstra* Flights;
-   while(fin >> tempPort)
-   {
-   		fin >> tempCity;
-		airport1 = new Airport(tempPort, tempCity);
-		fin >> tempPort;
-		fin >> tempCity;
-		airport2 = new Airport(tempPort,tempCity);
-		fin >> dist;
-		Flights->add(airport1,airport2,dist);
-   }
-
-   createGraphFromFile(fin); //create a graph from input file
+   ifstream fin;
+   while(openInputFile(fin));
+   createGraphFromFile(fin, g1);
 
 	do {
 		displayMenu();
@@ -81,16 +96,11 @@ int main()
 			g1->breadthFirstTraversal();
 			break;
 		case 5: //remove an edge
-			cout << "Enter the start vertex(airport city): ";
-			cin >> sAirport >> sCity;
-			cout << "Enter the end vertex(airport city): ";
-			cin >> eAirport >> eCity;
-			tempAirport1.setAirport(sAirport);
-			tempAirport1.setCity(sCity);
-			tempAirport2.setAirport(eAirport);
-			tempAirport2.setCity(eCity);
-			g1->remove(tempAirport1, tempAirport2);
-
+			cout << "Enter the starting vertex: ";
+			cin >> sname;
+			cout << "Enter the ending vertex: ";
+			cin >> ename;
+			g1->remove(sname, ename);
 			break;
 		case 6: //get the number of vertices
 			cout << "The number of vertices in the graph = " << g1->GetSize() << endl; // ???????
