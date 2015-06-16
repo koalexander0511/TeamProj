@@ -48,7 +48,7 @@ protected: // protected so you can derive this class for you team project soluti
         }
     };
 
-    LinkedStack<LabelType>* undoStack; // move to LinkedGraph.h
+    LinkedStack<UndoStackElement*>* undoStack;
 
 
    int numberOfVertices;
@@ -95,13 +95,18 @@ template<class LabelType>
 LinkedGraph<LabelType>::
 LinkedGraph(): numberOfVertices(0), numberOfEdges(0)
 {
-    undoStack = new LinkedStack<LabelType>();
+    undoStack = new LinkedStack<UndoStackElement*>();
+
 	pvertexIterator = 0;
 }  // end default constructor
 
 template<class LabelType>
 LinkedGraph<LabelType>::~LinkedGraph()
 {
+    // delete each undostack element
+    for(int i = 0; i < undoStack->size(); i++) {
+        undoStack->pop();
+    }
     delete undoStack;
 }
 
@@ -132,6 +137,9 @@ bool LinkedGraph<LabelType>::add(LabelType start, LabelType end, int edgeWeight)
 
 		return true;
    }
+
+   // add to undoStack
+
    return false;
 }  // end add
 
