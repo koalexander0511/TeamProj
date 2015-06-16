@@ -51,8 +51,11 @@ int main()
    T g1 = new Dijkstra<Airport>();
    bool done = false;
    int choice;
-   string sname, ename;
+   string sCity, eCity;
+   string sAirport, eAirport;
    int weight;
+   Airport tempAirport1;
+   Airport tempAirport2;
 
    /*
    PSUDOCODE FOR CREATING A GRAPH FROM INPUT FILE.
@@ -89,14 +92,20 @@ int main()
 			displayMenu();
 			break;
 
-		case 2: //add a vertex
-			cout << "Enter the start vertex: ";
-			cin >> sname;
-			cout << "Enter the end vertex: ";
-			cin >> ename;
-			cout << "Enter the weight: ";
+		case 2: //add an edge, 2 vertices
+			cout << "Enter the start vertex(airport city): ";
+			cin >> sAirport >> sCity;
+			cout << "Enter the end vertex(airport city): ";
+			cin >> eAirport >> eCity;
+			cout << "Enter the first weight: ";
 			cin >> weight;
-			g1.add(sname, ename, weight);
+
+			tempAirport1.setAirport(sAirport);
+			tempAirport1.setCity(sCity);
+			tempAirport2.setAirport(eAirport);
+			tempAirport2.setCity(eCity);
+
+			g1.add(tempAirport1, tempAirport2, weight);
 			break;
 		case 3: //display the graph depth traversal
 			g1.depthFirstTraversal();
