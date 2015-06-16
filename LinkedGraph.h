@@ -44,7 +44,7 @@ protected: // protected so you can derive this class for you team project soluti
         LabelType getEndItem() const {return item2; }
     };
 
-    LinkedStack<UndoStackElement*>* undoStack;
+    LinkedStack<UndoStackElement*> * undoStack;
 
 
    int numberOfVertices;
@@ -92,7 +92,7 @@ template<class LabelType>
 LinkedGraph<LabelType>::
 LinkedGraph(): numberOfVertices(0), numberOfEdges(0)
 {
-    undoStack = new LinkedStack<UndoStackElement*>();
+    undoStack = new LinkedStack<UndoStackElement* >();
 
 	pvertexIterator = 0;
 }  // end default constructor
