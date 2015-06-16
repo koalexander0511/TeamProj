@@ -158,7 +158,7 @@ int main()
 		}
 
 		case 9: // undo
-
+            g1->undo();
 			break;
 
 		case 10: // write to file

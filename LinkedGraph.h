@@ -37,7 +37,7 @@ protected: // protected so you can derive this class for you team project soluti
         LabelType item2;
         lastOperation lastOp;
     public:
-        UndoStackElement(lastOperation lo, LabelType a, LabelType b)
+        UndoStackElement(lastOperation lo, LabelType& a, LabelType& b)
         {lastOp = lo; item1 = a; item2 = b; }
         void applyUndo()
         {
@@ -136,10 +136,11 @@ bool LinkedGraph<LabelType>::add(LabelType start, LabelType end, int edgeWeight)
    {
 		numberOfEdges++; // Each bidirectional edge counts as a single edge
 
+		// add to undoStack
+		undoStack->push(new UndoStackElement(UndoStackElement::ADD, start, end));
+
 		return true;
    }
-
-   // add to undoStack
 
    return false;
 }  // end add
@@ -179,6 +180,8 @@ bool LinkedGraph<LabelType>::remove(LabelType start, LabelType end)
    }
    else
       successful = false;    // Failed disconnect from startVertex
+
+   // add to undoStack
 
    return successful;
 }  // end remove
@@ -316,6 +319,8 @@ void LinkedGraph<LabelType>::undo()
 {
     // peek most recent addition to the undoStack
     // and apply opposite(add/remove) to graph, then pop stack
+    undoStack->peek()->applyUndo();
+    undoStack->pop();
 }
 
 template <class LabelType>
