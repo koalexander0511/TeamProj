@@ -1,7 +1,11 @@
+
 #ifndef AIRPORT_H
 #define AIRPORT_H
 #include <string>
 #include <iostream>
+
+using namespace std;
+
 class Airport
 {
 private:
@@ -17,13 +21,14 @@ public:
 	void setCity(string str)					{ city = str; }
 	Airport& operator=(const Airport& right);
 	bool operator==(const Airport& right) const;
+	bool operator< (const Airport& port) const;
 
-	friend ostream & operator<<(ostream & os, const Airport &right);
+	friend ostream& operator<<(ostream& os, const Airport& right);
 };
 
-ostream & operator<<(ostream & os, const Airport &right)
+ostream& operator<<(ostream &os, const Airport &right)
 {
-	os << right.getAirport() << " " << right.getCity() << endl;
+	os << right.airport << " " << right.city << endl;
 	return os;
 }
 Airport& Airport::operator=(const Airport& right)
@@ -39,4 +44,9 @@ bool Airport::operator==(const Airport& right) const
 	else
 		return false;
 }
+
+bool Airport::operator< (const Airport& port) const {
+    return airport < port.airport;
+}
+
 #endif
