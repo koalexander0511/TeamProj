@@ -34,7 +34,7 @@ bool openOutputFile(ofstream &fout) //function that asks the user to enter a fil
 	fout.open(filename.c_str());
 	return fout.is_open();
 }
-void createGraphFromFile(ifstream &fin, T &map)
+void createGraphFromFile(ifstream &fin, T &g)
 {
 	Airport *airport1, *airport2;
 	string tempPort, tempCity;
@@ -48,17 +48,12 @@ void createGraphFromFile(ifstream &fin, T &map)
 		fin >> tempCity;
 		airport2 = new Airport(tempPort, tempCity);
 		fin >> dist;
-		map->add(*airport1, *airport2, dist);
+		g->add(*airport1, *airport2, dist);
 	}
 }
 
 int main()
 {
-
-	//LinkedGraph<string>* myGraph = new LinkedGraph<string>();
-
-	cout << "Testing Graph . . . ." << endl << endl;
-	//graphTest(myGraph);
 	T g1 = new Dijkstra<Airport>();
 	bool done = false;
 	int choice;
@@ -71,8 +66,9 @@ int main()
 
 	ofstream fout;
 	ifstream fin;
-	while (openInputFile(fin));
-	createGraphFromFile(fin, g1);
+
+	if(openInputFile(fin))
+        createGraphFromFile(fin, g1);
 	fin.close();
 
 	string fname;
