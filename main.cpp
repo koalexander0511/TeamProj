@@ -162,17 +162,25 @@ int main()
 
 		case 8: //find the shorted path between two vertices
 		{
-			cout << "Enter the starting vertex: ";
-			cin >> vname;
-			cout << "Enter the ending vertex: ";
-			cin >> vname2;
-			int result1 = g1->Search(vname);
-			int result2 = g1->Search(vname2);
-			if (result1 == -1 || result2 == -1){
+			cout << "Enter the starting vertex(airport city): ";
+			cin >> sAirport >> sCity;
+			cout << "Enter the ending vertex(airport city): ";
+			cin >> eAirport >> eCity;
+
+			tempAirport1.setAirport(sAirport);
+			tempAirport1.setCity(sCity);
+			tempAirport2.setAirport(eAirport);
+			tempAirport2.setCity(eCity);
+
+			int result1 = g1->seachVertex(tempAirport1);
+			int result2 = g1->searchVertex(tempAirport2);
+			if (result1 == -1 || result2 == -1) {
 				cout << "Error: Invalid vertices" << endl;
 			}
 			else{
-				g1->FindShortestPath(vname, vname2);
+                g1->setStartPoint(tempAirport1)
+				g1->distanceTo(tempAirport2);
+				// g1->printShortestPath(); // add this function to dijkstra?
 			}
 			break;
 		}
