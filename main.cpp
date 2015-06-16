@@ -178,7 +178,7 @@ int main()
 			}
 			else{
 				g1->setStartPoint(tempAirport1);
-                g1->setStartPoint(tempAirport1);
+				g1->setStartPoint(tempAirport1);
 				g1->distanceTo(tempAirport2);
 				// g1->printShortestPath(); // add this function to dijkstra?
 			}
@@ -186,7 +186,7 @@ int main()
 		}
 
 		case 9: // undo
-            g1->undo();
+			g1->undo();
 			break;
 
 		case 10: // write to file

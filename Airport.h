@@ -2,6 +2,9 @@
 #define AIRPORT_H
 #include <string>
 #include <iostream>
+
+using namespace std;
+
 class Airport
 {
 private:
@@ -32,6 +35,7 @@ Airport& Airport::operator=(const Airport& right)
 	setCity(right.getCity());
 	return *this;
 }
+
 bool Airport::operator==(const Airport& right) const
 {
 	if (airport == right.getAirport() && city == right.getCity())
