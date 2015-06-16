@@ -88,7 +88,7 @@ public:
    void breadthFirstTraversal(LabelType start, void visit(LabelType&));
 
    void undo();
-   int searchVertex(const LabelType&);
+   int searchVertex(const LabelType&) const;
    virtual void writeToFile(ofstream&) const;
 };
 
@@ -326,7 +326,7 @@ void LinkedGraph<LabelType>::undo()
 }
 
 template <class LabelType>
-int LinkedGraph<LabelType>::searchVertex(const LabelType& target)
+int LinkedGraph<LabelType>::searchVertex(const LabelType& target) const
 {
     if(vertices.contains(target))
         return 1;

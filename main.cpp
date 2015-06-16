@@ -126,7 +126,7 @@ int main()
 			g1->breadthFirstTraversal(tempAirport1, displayAirport);
 			break;
 		case 5: //remove an edge
-			
+
 			cout << "Enter the starting Airport(3 capital letters): ";
 			cin >> tempPort;
 			cout << "Enter the starting City:";
@@ -180,6 +180,7 @@ int main()
 			}
 			else{
 				g1->setStartPoint(tempAirport1);
+                g1->setStartPoint(tempAirport1);
 				g1->distanceTo(tempAirport2);
 				// g1->printShortestPath(); // add this function to dijkstra?
 			}
