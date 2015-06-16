@@ -25,18 +25,6 @@ typedef Dijkstra<Airport> *T;
 
 void displayMenu();
 void createGraph(T &t);
-
-template<class ItemType>
-void ReadFromFile(string filename, Dijkstra<Airport> &graph){
-	ifstream infile;
-	infile.open(filename.c_str());
-	if (infile.fail()){
-		exit(1);
-	}
-	// not sure exactly what goes in here
-
-	infile.close();
-}
 void display(string& anItem)
 {
    cout << "Displaying item - " << anItem << endl;
