@@ -45,11 +45,6 @@ void display(string& anItem)
 }
 int main()
 {
-
-   //LinkedGraph<string>* myGraph = new LinkedGraph<string>();
-
-   cout << "Testing Graph . . . ." << endl << endl ;
-   //graphTest(myGraph);
    T g1 = new Dijkstra<Airport>();
    bool done = false;
    int choice;
