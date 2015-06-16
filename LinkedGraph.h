@@ -318,6 +318,14 @@ void LinkedGraph<LabelType>::undo()
     // and apply opposite(add/remove) to graph, then pop stack
 }
 
+template <class LabelType>
+int LinkedGraph<LabelType>::searchVertex(const LabelType& target)
+{
+    if(vertices.contains(target))
+        return 1;
+    return -1;
+}
+
 // WRITE THE MEMBER FUNCTION HERE TO
    //         WRITE THE GRAPH TO A TEXT FILE (SUGGEST TO PASS AN
    //        ofstream TO THIS !
