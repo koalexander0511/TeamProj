@@ -39,49 +39,6 @@ void display(string& anItem)
 {
    cout << "Displaying item - " << anItem << endl;
 }
-
-void graphTest(LinkedGraph<string>* testGraph)
-{
-   string A("A");
-   string B("B");
-   string C("C");
-   string D("D");
-   string E("E");
-   string F("F");
-   string G("G");
-   string H("H");
-   string I("I");
-   string J("J");
-   string K("K");
-   string L("L");
-   string M("M");
-   string N("N");
-
-   testGraph->add(A, B, 0);
-   testGraph->add(A, C, 0);
-   testGraph->add(A, D, 0);
-   testGraph->add(B, E, 0);
-   testGraph->add(B, F, 0);
-   testGraph->add(C, G, 0);
-   testGraph->add(D, H, 0);
-   testGraph->add(D, I, 0);
-   testGraph->add(F, J, 0);
-   testGraph->add(G, K, 0);
-   testGraph->add(G, L, 0);
-   testGraph->add(H, M, 0);
-   testGraph->add(I, M, 0);
-   testGraph->add(I, N, 0);
-
-   cout << "Vertices :" << testGraph->getNumVertices() << endl;
-   cout << "Edges :" << testGraph->getNumEdges() << endl;
-
-   cout << "\nDepth-first traversal (should be A B E F J C G K L D H M I N):" << endl;
-   testGraph->depthFirstTraversal(A, display);
-
-   cout << "\nBreadth-first traversal (should be A B C D E F G H I J K L M N):" << endl;
-   testGraph->breadthFirstTraversal(A, display);
-}  // end graphTest
-
 int main()
 {
 
