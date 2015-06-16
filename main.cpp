@@ -121,17 +121,20 @@ int main()
 			g1->remove(tempAirport1, tempAirport2);
 			break;
 		case 6: //get the number of vertices
-			cout << "The number of vertices in the graph = " << g1->GetSize() << endl; // ???????
+			cout << "The number of vertices in the graph = " << g1->getNumVertices() << endl;
 			break;
 		case 7: //search for a certain vertex
 		{
-					 cout << "Enter a vertex: ";
-					 cin >> sname;
-					 int result = g1->Search(sname);
+					 cout << "Enter a vertex(airport city): ";
+					 cin >> sAirport >> sCity;
+					 tempAirport1.setAirport(sAirport);
+					 tempAirport1.setCity(sCity);
+
+					 int result = g1->searchVertex(tempAirport1);
 					 if (result == -1)
-						 cout << "Vertex " << sname << " does not exist in the graph";
+						 cout << "Vertex " << tempAirport1 << " does not exist in the graph";
 					 else
-						 cout << "Vertex " << sname << " found in the graph";
+						 cout << "Vertex " << tempAirport1 << " found in the graph";
 					 cout << endl;
 					 break;
 		}

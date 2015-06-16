@@ -88,6 +88,7 @@ public:
    void breadthFirstTraversal(LabelType start, void visit(LabelType&));
 
    void undo();
+   int searchVertex(const LabelType&);
    virtual void writeToFile(ofstream&) const;
 };
 
