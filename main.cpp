@@ -84,29 +84,29 @@ int main()
 			cin >> ename;
 			cout << "Enter the weight: ";
 			cin >> weight;
-			g1.add(sname, ename, weight);
+			g1->add(sname, ename, weight);
 			break;
 		case 3: //display vertices in the graph
-			g1.DisplayVertices();
+			g1->DisplayVertices();
 			break;
 		case 4: //display the graph
-			g1.DisplayGraph();
+			g1->DisplayGraph();
 			break;
 		case 5: //remove an edge
 			cout << "Enter the starting vertex: ";
 			cin >> sname;
 			cout << "Enter the ending vertex: ";
 			cin >> ename;
-			g1.remove(sname, ename);
+			g1->remove(sname, ename);
 			break;
 		case 6: //get the number of vertices
-			cout << "The number of vertices in the graph = " << g1.GetSize() << endl; // ???????
+			cout << "The number of vertices in the graph = " << g1->GetSize() << endl; // ???????
 			break;
 		case 7: //search for a certain vertex
 		{
 					 cout << "Enter a vertex: ";
 					 cin >> sname;
-					 int result = g1.Search(sname);
+					 int result = g1->Search(sname);
 					 if (result == -1)
 						 cout << "Vertex " << sname << " does not exist in the graph";
 					 else
@@ -118,17 +118,18 @@ int main()
 
 		case 8: //find the shorted path between two vertices
 		{
-					 cout << "Enter the starting vertex: ";
+					 cout << "Enter the starting airport: ";
 					 cin >> vname;
+					 cout << "Enter city: ";
 					 cout << "Enter the ending vertex: ";
 					 cin >> vname2;
-					 int result1 = g1.Search(vname);
-					 int result2 = g1.Search(vname2);
+					 int result1 = g1->Search(vname);
+					 int result2 = g1->Search(vname2);
 					 if (result1 == -1 || result2 == -1){
 						 cout << "Error: Invalid vertices" << endl;
 					 }
 					 else{
-						 g1.FindShortestPath(vname, vname2);
+						 g1->distanceTo(vname2);
 					 }
 					 break;
 		}
@@ -138,9 +139,11 @@ int main()
 			break;
 
 		case 10: // write to file
+			string fName;
+			ofstream fout;
 			cout << "Enter the file name: ";
-			cin >> fName;
-			writeToFile(fName, g1);
+			getline(cin, fName);
+			g1->writeToFile(fout);
 			break;
 
 		case 11: //exit testing
