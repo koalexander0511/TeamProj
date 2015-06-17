@@ -101,13 +101,12 @@ template<class LabelType>
 LinkedGraph<LabelType>::~LinkedGraph()
 {
     // delete each undostack element
-    for(int i = 0; i < undoStack->size(); i++) {
+	int i = undoStack->size();
+    for(; i > 0; i--) {
 		delete undoStack->peek();
         undoStack->pop();
     }
     delete undoStack;
-	// delete vertices ?
-	// vertices.clear(); ?
 }
 
 template<class LabelType>
@@ -307,7 +306,7 @@ findOrCreateVertex(const LabelType& vertexLabel)
    }
    else
    {
-      theVertex = new Vertex<LabelType>(vertexLabel); // try deleting from vertices?
+      theVertex = new Vertex<LabelType>(vertexLabel);
       vertices.add(vertexLabel, theVertex);
       numberOfVertices++;
    }  // end if
