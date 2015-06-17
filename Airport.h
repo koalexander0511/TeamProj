@@ -46,8 +46,8 @@ bool Airport::operator==(const Airport& right) const
 }
 
 bool Airport::operator< (const Airport& port) const {
-	// compares 3 letter airport code
-	return airport < port.airport;
+    // compares 3 letter airport code
+    return airport < port.airport;
 }
 
 #endif
