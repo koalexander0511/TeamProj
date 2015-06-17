@@ -89,7 +89,11 @@ int main()
 
 		do {
 			displayMenu();
-			cin >> choice;
+			while (!(cin >> choice)) {
+				cout << "Please enter a number. " << endl;
+				cin.clear();
+				cin.ignore(1000, '\n');
+			}
 
 			
 			switch (choice)
@@ -219,15 +223,23 @@ int main()
 
 			case 8: //find the shorted path between two vertices
 			{
-				cout << "Enter the starting vertex(airport city): ";
-				cin >> sAirport >> sCity;
-				cout << "Enter the ending vertex(airport city): ";
-				cin >> eAirport >> eCity;
+				cin.ignore(1000, '\n'); // ignore new line from menu choice
+
+				cout << "Enter the starting Airport(3 capital letters): ";
+				getline(cin, sAirport);
+				cout << "Enter the starting City: ";
+				getline(cin, sCity);
+
+				cout << "Enter the ending Airport(3 capital letters): ";
+				getline(cin, eAirport);
+				cout << "Enter the ending city: ";
+				getline(cin, eCity);
 
 				tempAirport1.setAirport(sAirport);
 				tempAirport1.setCity(sCity);
 				tempAirport2.setAirport(eAirport);
 				tempAirport2.setCity(eCity);
+				cout << endl;
 
 				bool result1 = g1->searchVertex(tempAirport1);
 				bool result2 = g1->searchVertex(tempAirport2);
@@ -235,7 +247,6 @@ int main()
 					cout << "Error: Invalid vertices" << endl;
 				}
 				else{
-					g1->setStartPoint(tempAirport1);
 					g1->setStartPoint(tempAirport1);
 					int d = g1->distanceTo(tempAirport2);
 					cout << "Distance to: " << tempAirport2 << " = " << d << endl;
