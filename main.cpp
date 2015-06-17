@@ -102,10 +102,18 @@ int main()
 
 			case 2: //add an edge, 2 vertices
 			{
-				cout << "Enter the start vertex(airport city): ";
-				cin >> sAirport >> sCity;
-				cout << "Enter the end vertex(airport city): ";
-				cin >> eAirport >> eCity;
+				cin.ignore(1000, '\n'); // ignore new line from menu choice
+
+				cout << "Enter the starting Airport(3 capital letters): ";
+				getline(cin, sAirport);
+				cout << "Enter the starting City: ";
+				getline(cin, sCity);
+
+				cout << "Enter the ending Airport(3 capital letters): ";
+				getline(cin, eAirport);
+				cout << "Enter the ending City: ";
+				getline(cin, eCity);
+
 				cout << "Enter the weight: ";
 				cin >> weight;
 
@@ -121,8 +129,13 @@ int main()
 			case 3: //display the graph depth traversal
 			{
 				// Enter starting point for traversal
-				cout << "Enter the start vertex(airport city): ";
-				cin >> sAirport >> sCity;
+				cin.ignore(1000, '\n'); // ignore new line from menu choice
+
+				cout << "Enter the starting Airport(3 capital letters): ";
+				getline(cin, sAirport);
+				cout << "Enter the starting City: ";
+				getline(cin, sCity);
+
 				tempAirport1.setAirport(sAirport);
 				tempAirport1.setCity(sCity);
 
@@ -135,8 +148,12 @@ int main()
 			case 4: //display the graph breadth traversal
 			{
 				// Enter starting point for traversal
-				cout << "Enter the start vertex(airport city): ";
-				cin >> sAirport >> sCity;
+				cin.ignore(1000, '\n'); // ignore new line from menu choice
+
+				cout << "Enter the starting Airport(3 capital letters): ";
+				getline(cin, sAirport);
+				cout << "Enter the starting City: ";
+				getline(cin, sCity);
 				tempAirport1.setAirport(sAirport);
 				tempAirport1.setCity(sCity);
 
@@ -148,14 +165,16 @@ int main()
 
 			case 5: //remove an edge
 			{
+				cin.ignore(1000, '\n'); // ignore new line from menu choice
+
 				cout << "Enter the starting Airport(3 capital letters): ";
-				cin >> sAirport;
-				cout << "Enter the starting City:";
+				getline(cin, sAirport);
+				cout << "Enter the starting City: ";
 				getline(cin, sCity);
 
-				cout << "Enter the ending Airport(3 capital letters):";
-				cin >> eAirport;
-				cout << "Enter the ending city:";
+				cout << "Enter the ending Airport(3 capital letters): ";
+				getline(cin, eAirport);
+				cout << "Enter the ending city: ";
 				getline(cin, eCity);
 
 				tempAirport1.setAirport(sAirport);
@@ -163,7 +182,8 @@ int main()
 				tempAirport2.setAirport(eAirport);
 				tempAirport2.setCity(eCity);
 
-				g1->remove(tempAirport1, tempAirport2);
+				if (g1->searchVertex(tempAirport1) && g1->searchVertex(tempAirport2))
+					g1->remove(tempAirport1, tempAirport2);
 				break;
 			}
 
@@ -175,8 +195,13 @@ int main()
 
 			case 7: //search for a certain vertex
 			{
-				cout << "Enter a vertex(airport city): ";
-				cin >> sAirport >> sCity;
+				cin.ignore(1000, '\n'); // ignore new line from menu choice
+
+				cout << "Enter an Airport(3 capital letters): ";
+				getline(cin, sAirport);
+				cout << "Enter a City: ";
+				getline(cin, sCity);
+
 				tempAirport1.setAirport(sAirport);
 				tempAirport1.setCity(sCity);
 
@@ -273,7 +298,7 @@ void displayMenu()
 	cout << order++ << ": Get the number of vertices in the graph." << endl;
 	cout << order++ << ": Search for a certain vertex." << endl;
 	cout << order++ << ": Find the shortest path between two vertices." << endl;
-	cout << order++ << ": Undo last chnge." << endl;
+	cout << order++ << ": Undo last change." << endl;
 	cout << order++ << ": Write graph to file." << endl;
 	cout << 11 << ": Exit the program." << endl << endl;
 
