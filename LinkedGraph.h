@@ -27,7 +27,7 @@ class LinkedGraph : public GraphInterface<LabelType>
 protected: // protected so you can derive this class for you team project solution
 
     // nested class for LinkedStack element store:
-    // operation type(add/remove), item1, and item2.
+    // operation type(add/remove), item1, item2, and weight.
     class UndoStackElement
     {
     public:
@@ -35,16 +35,19 @@ protected: // protected so you can derive this class for you team project soluti
     private:
         LabelType item1;
         LabelType item2;
+		int weight;
         lastOperation lastOp;
     public:
-        UndoStackElement(lastOperation lo, LabelType a, LabelType b)
+        UndoStackElement(lastOperation lo, LabelType a, LabelType b, int w = 0)
         {lastOp = lo; item1 = a; item2 = b; }
         int getLastOperation() const {return lastOp; }
         LabelType getStartItem() const {return item1; }
         LabelType getEndItem() const {return item2; }
+		int getWeight() const {return weight; }
     };
 
-    LinkedStack<UndoStackElement*> * undoStack;
+    LinkedStack<UndoStackElement*> * undoStack; // to keep track of adds and removes
+	bool undoCall = false; // check if add or remove call was because of undo()
 
 
    int numberOfVertices;
@@ -55,7 +58,7 @@ protected: // protected so you can derive this class for you team project soluti
    DACmap<LabelType, Vertex<LabelType>* > vertices;
    DACmapIterator<LabelType, Vertex<LabelType>* > *pvertexIterator;
 
-   // Marks all verices as unvisited.
+   // Marks all vertices as unvisited.
    void unvisitVertices();
 
    Vertex<LabelType>* findOrCreateVertex(const LabelType& vertexLabel);
@@ -83,8 +86,8 @@ public:
    void depthFirstTraversal(LabelType start, void visit(LabelType&));
    void breadthFirstTraversal(LabelType start, void visit(LabelType&));
 
-   void undo();
-   bool searchVertex(const LabelType&) const;
+   void undo(); // undo last add/remove
+   bool searchVertex(const LabelType&) const; // checks if graph contains that label
    virtual void writeToFile(ofstream&) const;
 };
 
@@ -103,6 +106,7 @@ LinkedGraph<LabelType>::~LinkedGraph()
     // delete each undostack element
 	int i = undoStack->size();
     for(; i > 0; i--) {
+		
 		delete undoStack->peek();
         undoStack->pop();
     }
@@ -135,7 +139,9 @@ bool LinkedGraph<LabelType>::add(LabelType start, LabelType end, int edgeWeight)
 		numberOfEdges++; // Each bidirectional edge counts as a single edge
 
 		// add to undoStack
-		undoStack->push(new UndoStackElement(UndoStackElement::ADD, start, end));
+		if (!undoCall)
+			undoStack->push(new UndoStackElement(UndoStackElement::ADD, start, end));
+		undoCall = false;
 
 		return true;
    }
@@ -180,8 +186,10 @@ bool LinkedGraph<LabelType>::remove(LabelType start, LabelType end)
       successful = false;    // Failed disconnect from startVertex
 
    // add to undoStack
-   if(successful)
-        undoStack->push(new UndoStackElement(UndoStackElement::REMOVE, start, end));
+   if (successful && !undoCall) {
+	   undoStack->push(new UndoStackElement(UndoStackElement::REMOVE, start, end, getEdgeWeight(start, end)));
+   }
+   undoCall = false;
 
    return successful;
 }  // end remove
@@ -322,11 +330,12 @@ void LinkedGraph<LabelType>::undo()
 	if (!undoStack->size())
 		return;
 
+	undoCall = true;
     int lo = undoStack->peek()->getLastOperation();
     if(lo == UndoStackElement::ADD)
         remove(undoStack->peek()->getStartItem(), undoStack->peek()->getEndItem());
     else if(lo == UndoStackElement::REMOVE)
-        add(undoStack->peek()->getStartItem(), undoStack->peek()->getEndItem());
+        add(undoStack->peek()->getStartItem(), undoStack->peek()->getEndItem(), undoStack->peek()->getWeight());
 	delete undoStack->peek();
     undoStack->pop();
 }
