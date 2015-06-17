@@ -84,7 +84,7 @@ public:
    void breadthFirstTraversal(LabelType start, void visit(LabelType&));
 
    void undo();
-   int searchVertex(const LabelType&) const;
+   bool searchVertex(const LabelType&) const;
    virtual void writeToFile(ofstream&) const;
 };
 
@@ -101,13 +101,12 @@ template<class LabelType>
 LinkedGraph<LabelType>::~LinkedGraph()
 {
     // delete each undostack element
-    for(int i = 0; i < undoStack->size(); i++) {
+	int i = undoStack->size();
+    for(; i > 0; i--) {
 		delete undoStack->peek();
         undoStack->pop();
     }
     delete undoStack;
-	// delete vertices?
-	// vertices.clear(); ?
 }
 
 template<class LabelType>
@@ -307,7 +306,7 @@ findOrCreateVertex(const LabelType& vertexLabel)
    }
    else
    {
-      theVertex = new Vertex<LabelType>(vertexLabel); // try deleting from vertices?
+      theVertex = new Vertex<LabelType>(vertexLabel);
       vertices.add(vertexLabel, theVertex);
       numberOfVertices++;
    }  // end if
@@ -320,6 +319,9 @@ void LinkedGraph<LabelType>::undo()
 {
     // peek most recent addition to the undoStack
     // and apply opposite(add/remove) to graph, then pop stack
+	if (!undoStack->size())
+		return;
+
     int lo = undoStack->peek()->getLastOperation();
     if(lo == UndoStackElement::ADD)
         remove(undoStack->peek()->getStartItem(), undoStack->peek()->getEndItem());
@@ -330,11 +332,11 @@ void LinkedGraph<LabelType>::undo()
 }
 
 template <class LabelType>
-int LinkedGraph<LabelType>::searchVertex(const LabelType& target) const
+bool LinkedGraph<LabelType>::searchVertex(const LabelType& target) const
 {
     if(vertices.contains(target))
-        return 1;
-    return -1;
+        return true;
+    return false;
 }
 
 // WRITE THE MEMBER FUNCTION HERE TO
