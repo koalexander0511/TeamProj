@@ -44,7 +44,7 @@ protected: // protected so you can derive this class for you team project soluti
         LabelType getEndItem() const {return item2; }
     };
 
-    LinkedStack<UndoStackElement*>* undoStack;
+    LinkedStack<UndoStackElement*> * undoStack;
 
 
    int numberOfVertices;
@@ -92,7 +92,7 @@ template<class LabelType>
 LinkedGraph<LabelType>::
 LinkedGraph(): numberOfVertices(0), numberOfEdges(0)
 {
-    undoStack = new LinkedStack<UndoStackElement*>();
+    undoStack = new LinkedStack<UndoStackElement* >();
 
 	pvertexIterator = 0;
 }  // end default constructor
@@ -102,9 +102,12 @@ LinkedGraph<LabelType>::~LinkedGraph()
 {
     // delete each undostack element
     for(int i = 0; i < undoStack->size(); i++) {
+		delete undoStack->peek();
         undoStack->pop();
     }
     delete undoStack;
+	// delete vertices?
+	// vertices.clear(); ?
 }
 
 template<class LabelType>
@@ -304,7 +307,7 @@ findOrCreateVertex(const LabelType& vertexLabel)
    }
    else
    {
-      theVertex = new Vertex<LabelType>(vertexLabel);
+      theVertex = new Vertex<LabelType>(vertexLabel); // try deleting from vertices?
       vertices.add(vertexLabel, theVertex);
       numberOfVertices++;
    }  // end if
@@ -322,6 +325,7 @@ void LinkedGraph<LabelType>::undo()
         remove(undoStack->peek()->getStartItem(), undoStack->peek()->getEndItem());
     else if(lo == UndoStackElement::REMOVE)
         add(undoStack->peek()->getStartItem(), undoStack->peek()->getEndItem());
+	delete undoStack->peek();
     undoStack->pop();
 }
 
