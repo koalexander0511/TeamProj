@@ -28,7 +28,7 @@ public:
 
 ostream& operator<<(ostream &os, const Airport &right)
 {
-	os << right.airport << " " << right.city << endl;
+	os << right.airport << " " << right.city;
 	return os;
 }
 Airport& Airport::operator=(const Airport& right)
