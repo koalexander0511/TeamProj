@@ -1,9 +1,9 @@
 
 /*
-CIS 22C Team 4 Project: Dijkstra's algorithm (shortest path)
-Program Edited by Ko Outlaw-Spruell, James Hinds, and Victoriia Petrusha
+	CIS 22C Team 4 Project: Dijkstra's algorithm (shortest path)
+	Program Edited by Ko Outlaw-Spruell, James Hinds, and Victoriia Petrusha
 
-16 June 2015
+	16 June 2015
 */
 
 #include <iostream>
@@ -91,7 +91,7 @@ int main()
 			displayMenu();
 			cin >> choice;
 
-
+			
 			switch (choice)
 			{
 			case 1: //display help menu
@@ -100,6 +100,7 @@ int main()
 				break;
 			}
 
+			// Bug: starting vertex can't be the very first city entered. 
 			case 2: //add an edge, 2 vertices
 			{
 				cin.ignore(1000, '\n'); // ignore new line from menu choice
@@ -142,6 +143,7 @@ int main()
 				cout << endl;
 				if (g1->searchVertex(tempAirport1))
 					g1->depthFirstTraversal(tempAirport1, displayAirport);
+				cout << endl;
 				break;
 			}
 
@@ -160,6 +162,7 @@ int main()
 				cout << endl;
 				if (g1->searchVertex(tempAirport1))
 					g1->breadthFirstTraversal(tempAirport1, displayAirport);
+				cout << endl;
 				break;
 			}
 
@@ -267,11 +270,11 @@ int main()
 				break;
 			}
 			} //end of switch
-
+			
 			cout << endl;
 		} while (!done);
 
-		cout << "Done with testing!" << endl;
+		cout << "Program will now exit. " << endl;
 		cin.get();
 		cin.get();
 
@@ -306,6 +309,6 @@ void displayMenu()
 
 void displayAirport(Airport& port)
 {
-	cout << port;
+	cout << port << endl;
 }
 
