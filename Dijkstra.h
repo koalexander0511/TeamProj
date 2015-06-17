@@ -74,8 +74,12 @@ bool Dijkstra<LabelType>::applyDijkstra()
 {
 	// unfinished vertices is filled with dij vertices
 	// test if need to reset distTo INT_MAX every time, between multiple changes/applyDijkstra's
+	for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
+		unfinishedVertices[i].setDist(INT_MAX);
+	}
+	finishedVertices.clear();
 
-	// startPoint has not been set
+	// check if startPoint has been set
 
 	DijkstraVertex sp(startPoint);
 	sp.setDist(0);
@@ -108,7 +112,7 @@ bool Dijkstra<LabelType>::applyDijkstra()
 
 			// if distTo dijVertex[current] + edgeWeight(current to neighbor) < dijVertex[neighbor]
 			// update dijVertex[neighbor]: prevVertex, and distTo
-			if (currentDij.getDist() + currentVertex->getEdgeWeight(neighborVertex->getLabel()) <= neighborDij.getDist()) {
+			if (currentDij.getDist() + currentVertex->getEdgeWeight(neighborVertex->getLabel()) < neighborDij.getDist()) {
 				neighborDij.setDist(currentDij.getDist() + currentVertex->getEdgeWeight(neighborVertex->getLabel()));
 				neighborDij.setPrev(currentDij.getLabel());
 			}
@@ -132,7 +136,26 @@ bool Dijkstra<LabelType>::applyDijkstra()
 		// cout << endl << endl;
 
 		// then push_back to finishedVertices
-		finishedVertices.push_back(unfinishedVertices[j++]);
+		// search for next dijvert that isn't in finished, and distTo < INT_MAX
+		DijkstraVertex tempDij = unfinishedVertices[j++];
+		bool ftemp = false;
+		for (unsigned l = 0; l < unfinishedVertices.size(); l++) {
+			if (unfinishedVertices[l].getDist() < INT_MAX) {
+				for (unsigned i = 0; i < finishedVertices.size(); i++) {
+					if (unfinishedVertices[l].getLabel() == finishedVertices[i].getLabel()) {
+						break;
+					}
+					else {
+						tempDij = unfinishedVertices[l];
+						ftemp = true;
+						break;
+					}
+				}
+			}
+			if (ftemp)
+				break;
+		}
+		finishedVertices.push_back(tempDij);
 	}
 
 	sp.setDist(0);
@@ -144,7 +167,7 @@ bool Dijkstra<LabelType>::applyDijkstra()
 		}
 	}
 
-	return false;
+	return true;
 }
 
 template <class LabelType>
@@ -196,12 +219,13 @@ template <class LabelType>
 int Dijkstra<LabelType>::distanceTo(LabelType x)
 {
 	applyDijkstra();
-	for (unsigned i = 0; i < finishedVertices.size(); i++) {
-		if (finishedVertices[i].getLabel() == x) {
-			return finishedVertices[i].getDist();
+	for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
+		if (unfinishedVertices[i].getLabel() == x) {
+			return unfinishedVertices[i].getDist();
 		}
 	}
 	// not found
+	cout << "not found" << endl;
 	return -1;
 }
 
