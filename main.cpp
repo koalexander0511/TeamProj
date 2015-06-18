@@ -248,6 +248,7 @@ int main()
 				}
 				else{
 					g1->setStartPoint(tempAirport1);
+					g1->setEndPoint(tempAirport2);
 					int d = g1->distanceTo(tempAirport2);
 					cout << "Distance to: " << tempAirport2 << " = " << d << endl;
 					// g1->printShortestPath(); // add this function to dijkstra? to print full path
@@ -263,6 +264,7 @@ int main()
 
 			case 10: // write to file
 			{
+				cin.ignore(1000, '\n'); // 
 				while (!openOutputFile(fout));
 				g1->writeToFile(fout);
 				fout.close();
