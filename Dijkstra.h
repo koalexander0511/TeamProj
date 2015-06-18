@@ -20,15 +20,21 @@ class Dijkstra : public LinkedGraph<LabelType>
 		LabelType label;
 		int distTo; // distance to this vertex
 		LabelType prevLabel; // DijkstraVertex that brought you to this one
+		bool isFinished;
 	public:
-		DijkstraVertex() : label(), distTo(INT_MAX) {}
-		DijkstraVertex(LabelType l) : label(l), distTo(INT_MAX) {}
+		DijkstraVertex() : label(), distTo(INT_MAX), isFinished(false) {}
+		DijkstraVertex(LabelType l) : label(l), distTo(INT_MAX), isFinished(false) {}
 
 		void setDist(int d) { distTo = d; }
 		void setPrev(LabelType pl) { prevLabel = pl; }
+		void setFinished(bool f) { isFinished = f; }
 		int getDist() const { return distTo; }
 		LabelType getPrev() const { return prevLabel; }
 		LabelType getLabel() const { return label; }
+		DijkstraVertex& operator=(const DijkstraVertex& right) 
+		{
+			label = right.label; setDist(right.distTo); setPrev(right.prevLabel); return *this; 
+		}
 	};
 
 private:
@@ -73,99 +79,84 @@ template <class LabelType>
 bool Dijkstra<LabelType>::applyDijkstra()
 {
 	// unfinished vertices is filled with dij vertices
-	// test if need to reset distTo INT_MAX every time, between multiple changes/applyDijkstra's
+	int startIndex = 0;
 	for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
 		unfinishedVertices[i].setDist(INT_MAX);
+		unfinishedVertices[i].setPrev(unfinishedVertices[i].getLabel());
+		if (unfinishedVertices[i].getLabel() == startPoint) {
+			startIndex = i;
+		}
 	}
+	// move startPoint to index 0
+	DijkstraVertex tempDij = unfinishedVertices[0];
+	unfinishedVertices[0] = unfinishedVertices[startIndex];
+	unfinishedVertices[startIndex] = tempDij;
+
+	// set startPoint distance
+	unfinishedVertices[0].setDist(0);
+	unfinishedVertices[0].setPrev(unfinishedVertices[0].getLabel());
+
 	finishedVertices.clear();
 
-	// check if startPoint has been set
+	finishedVertices.push_back(unfinishedVertices[0]);
 
-	DijkstraVertex sp(startPoint);
-	sp.setDist(0);
-	finishedVertices.push_back(sp); // start at startPoint, then push back neighbor as dijVert
-
-	Vertex<LabelType>* currentVertex;
-	int numNeighbors = 0;
-	Vertex<LabelType>* neighborVertex;
-
-	DijkstraVertex neighborDij;
-	DijkstraVertex currentDij;
-
-	int j = 0;
-	while (finishedVertices.size() <= unfinishedVertices.size()) {
-
-		currentVertex = this->vertices.getItem(finishedVertices.back().getLabel());
-
-		numNeighbors = currentVertex->getNumberOfNeighbors();
+	while (finishedVertices.size() < unfinishedVertices.size()) {
+		// number of neighbors at the current vertex
+		Vertex<LabelType>* currentVertex = vertices.getItem(finishedVertices.back().getLabel());
+		int numNeighbors = currentVertex->getNumberOfNeighbors();
 		currentVertex->resetNeighbor();
 
-		// cout << currentVertex->getLabel() << endl;
-		for (int i = 0; i < numNeighbors; i++) {
-			neighborVertex = this->vertices.getItem(currentVertex->getNextNeighbor());
+		// relax each neighbor
+		for (int k = 0; k < numNeighbors; k++) {
+			LabelType neighbor = currentVertex->getNextNeighbor();
 
-			// find dijVertex that = neighborVertex
-			for (unsigned k = 0; k < unfinishedVertices.size(); k++)
-				if (unfinishedVertices[k].getLabel() == neighborVertex->getLabel())
-					neighborDij = unfinishedVertices[k];
-			currentDij = finishedVertices.back();
-
-			// if distTo dijVertex[current] + edgeWeight(current to neighbor) < dijVertex[neighbor]
-			// update dijVertex[neighbor]: prevVertex, and distTo
-			if (currentDij.getDist() + currentVertex->getEdgeWeight(neighborVertex->getLabel()) < neighborDij.getDist()) {
-				neighborDij.setDist(currentDij.getDist() + currentVertex->getEdgeWeight(neighborVertex->getLabel()));
-				neighborDij.setPrev(currentDij.getLabel());
-			}
-
-			// cout << neighborVertex->getLabel() << " ";
-			// cout << neighborDij.getDist() << ": from " << neighborDij.getPrev() << endl;
-
+			// get neighbor unfinishedVertices index
+			unsigned neighborIndex = 0;
 			for (unsigned l = 0; l < unfinishedVertices.size(); l++) {
-				if (unfinishedVertices[l].getLabel() == currentDij.getLabel()) {
-					unfinishedVertices[l].setDist(currentDij.getDist());
-					unfinishedVertices[l].setPrev(currentDij.getPrev());
+				if (unfinishedVertices[l].getLabel() == neighbor){
+					neighborIndex = l;
+					break;
 				}
 			}
-			for (unsigned l = 0; l < unfinishedVertices.size(); l++) {
-				if (unfinishedVertices[l].getLabel() == neighborDij.getLabel()) {
-					unfinishedVertices[l].setDist(neighborDij.getDist());
-					unfinishedVertices[l].setPrev(neighborDij.getPrev());
-				}
+
+			if (finishedVertices.back().getDist() + getEdgeWeight(finishedVertices.back().getLabel(), neighbor) < 
+				unfinishedVertices[neighborIndex].getDist()) {
+				// found improved route
+				unfinishedVertices[neighborIndex].setDist(finishedVertices.back().getDist() + getEdgeWeight(finishedVertices.back().getLabel(), neighbor));
+				unfinishedVertices[neighborIndex].setPrev(finishedVertices.back().getLabel());
 			}
 		}
-		// cout << endl << endl;
 
-		// then push_back to finishedVertices
-		// search for next dijvert that isn't in finished, and distTo < INT_MAX
-		DijkstraVertex tempDij = unfinishedVertices[j++];
-		bool ftemp = false;
-		for (unsigned l = 0; l < unfinishedVertices.size(); l++) {
-			if (unfinishedVertices[l].getDist() < INT_MAX) {
-				for (unsigned i = 0; i < finishedVertices.size(); i++) {
-					if (unfinishedVertices[l].getLabel() == finishedVertices[i].getLabel()) {
-						break;
-					}
-					else {
-						tempDij = unfinishedVertices[l];
-						ftemp = true;
-						break;
-					}
+		// iterate through neighbors again, and push_back() to finishedVertices one that is not already in finishedVertices
+		currentVertex->resetNeighbor();
+		for (int k = 0; k < numNeighbors; k++) {
+			LabelType neighbor = currentVertex->getNextNeighbor();
+			// get neighbor unfinishedVertices index
+			unsigned neighborIndex = 0;
+			for (unsigned l = 0; l < unfinishedVertices.size(); l++) {
+				if (unfinishedVertices[l].getLabel() == neighbor){
+					neighborIndex = l;
+					break;
 				}
 			}
-			if (ftemp)
+			// check if that neighbor has already been added
+			bool added = false;
+			for (unsigned l = 0; l < finishedVertices.size(); l++) {
+				if (finishedVertices[l].getLabel() == unfinishedVertices[neighborIndex].getLabel()) {
+					added = true;
+					break;
+				}
+			}
+			if (added) {
+				continue;
+			}
+			else {
+				// push_back neighbor that is not already in finishedVertices
+				finishedVertices.push_back(unfinishedVertices[neighborIndex]);
 				break;
+			}
 		}
-		finishedVertices.push_back(tempDij);
-	}
-
-	sp.setDist(0);
-	sp.setPrev(sp.getLabel());
-	for (unsigned l = 0; l < unfinishedVertices.size(); l++) {
-		if (unfinishedVertices[l].getLabel() == sp.getLabel()) {
-			unfinishedVertices[l].setDist(sp.getDist());
-			unfinishedVertices[l].setPrev(sp.getPrev());
-		}
-	}
+	}	
 
 	return true;
 }
@@ -173,8 +164,6 @@ bool Dijkstra<LabelType>::applyDijkstra()
 template <class LabelType>
 bool Dijkstra<LabelType>::add(LabelType start, LabelType end, int edgeWeight)
 {
-	// document change with undoStack, then add() as usual
-	// (modify later if Dijkstra::add() requires it)
 	if (!this->vertices.contains(start))
 		unfinishedVertices.push_back(DijkstraVertex(start));
 	if (!this->vertices.contains(end))
@@ -186,13 +175,28 @@ bool Dijkstra<LabelType>::add(LabelType start, LabelType end, int edgeWeight)
 template <class LabelType>
 bool Dijkstra<LabelType>::remove(LabelType start, LabelType end)
 {
-	// document change with undoStack, then add() as usual
-	// (change later if Dijkstra::add() requires it)
 
-	// if start or end has no more neighbors due to this remove
-	// delete them from unfinished/finished vertices
+	bool isRemoved = LinkedGraph<LabelType>::remove(start, end);
+	if (!searchVertex(start)) {
+		// remove from unfinishedVertices
+		for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
+			if (unfinishedVertices[i].getLabel() == start) {
+				unfinishedVertices.erase(unfinishedVertices.begin() + i);
+				break;
+			}
+		}
+	}
+	if (!searchVertex(end)) {
+		// remove from unfinishedVertices
+		for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
+			if (unfinishedVertices[i].getLabel() == end) {
+				unfinishedVertices.erase(unfinishedVertices.begin() + i);
+				break;
+			}
+		}
+	}
 
-	return LinkedGraph<LabelType>::remove(start, end);
+	return isRemoved;
 }
 
 template <class LabelType>
@@ -219,9 +223,10 @@ template <class LabelType>
 int Dijkstra<LabelType>::distanceTo(LabelType x)
 {
 	applyDijkstra();
-	for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
-		if (unfinishedVertices[i].getLabel() == x) {
-			return unfinishedVertices[i].getDist();
+
+	for (unsigned i = 0; i < finishedVertices.size(); i++) {
+		if (finishedVertices[i].getLabel() == x) {
+			return finishedVertices[i].getDist();
 		}
 	}
 	// not found
@@ -233,9 +238,8 @@ template <class LabelType>
 void Dijkstra<LabelType>::writeToFile(ofstream& fout) const
 {
 	// Write the path taken to endPoint, use finished vertices, following prevVertex
+	
 
-
-	fout << "Dijkstra write to file. " << endl;
 }
 
 
