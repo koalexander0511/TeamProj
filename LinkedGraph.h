@@ -47,7 +47,7 @@ protected: // protected so you can derive this class for you team project soluti
     };
 
     LinkedStack<UndoStackElement*> * undoStack; // to keep track of adds and removes
-	bool undoCall = false; // check if add or remove call was because of undo()
+	bool undoCall; // check if add or remove call was because of undo()
 
 
    int numberOfVertices;
@@ -95,6 +95,7 @@ template<class LabelType>
 LinkedGraph<LabelType>::
 LinkedGraph(): numberOfVertices(0), numberOfEdges(0)
 {
+	undoCall = false;
     undoStack = new LinkedStack<UndoStackElement* >();
 
 	pvertexIterator = 0;
