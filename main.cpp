@@ -266,6 +266,28 @@ int main()
 			{
 				cin.ignore(1000, '\n'); // 
 				while (!openOutputFile(fout));
+
+				// cin.ignore(1000, '\n'); // ignore new line from menu choice
+
+				cout << "Enter the starting Airport(3 capital letters): ";
+				getline(cin, sAirport);
+				cout << "Enter the starting City: ";
+				getline(cin, sCity);
+
+				cout << "Enter the ending Airport(3 capital letters): ";
+				getline(cin, eAirport);
+				cout << "Enter the ending city: ";
+				getline(cin, eCity);
+
+				tempAirport1.setAirport(sAirport);
+				tempAirport1.setCity(sCity);
+				tempAirport2.setAirport(eAirport);
+				tempAirport2.setCity(eCity);
+				cout << endl;
+
+				g1->setStartPoint(tempAirport1);
+				g1->setEndPoint(tempAirport2);
+
 				g1->writeToFile(fout);
 				fout.close();
 				break;
