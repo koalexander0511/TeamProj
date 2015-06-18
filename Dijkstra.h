@@ -58,7 +58,7 @@ public:
 
 	int distanceTo(LabelType);
 
-	void writeToFile(ofstream&) const;
+	void writeToFile(ofstream&);
 };
 
 template <class LabelType>
@@ -235,11 +235,42 @@ int Dijkstra<LabelType>::distanceTo(LabelType x)
 }
 
 template <class LabelType>
-void Dijkstra<LabelType>::writeToFile(ofstream& fout) const
+void Dijkstra<LabelType>::writeToFile(ofstream& fout)
 {
-	// Write the path taken to endPoint, use finished vertices, following prevVertex
-	
+	applyDijkstra();
 
+	fout << "Path from " << startPoint << " to " << endPoint << ": " << endl;
+
+	vector<LabelType> path;
+
+	// assign tempDij to endPoint
+	DijkstraVertex tempDij;
+	for (unsigned i = 0; i < finishedVertices.size(); i++) {
+		if (finishedVertices[i].getLabel() == endPoint) {
+			tempDij = finishedVertices[i];
+			fout << "Distance to " << tempDij.getLabel() << ": " << tempDij.getDist() << endl;
+			break;
+		}
+	}
+
+	// write path taken to endPoint, following prevVertex
+	do {
+		path.push_back(tempDij.getLabel());
+		LabelType tempLabel = tempDij.getPrev();
+
+		// set tempDij to previous
+		for (unsigned i = 0; i < finishedVertices.size(); i++) {
+			if (finishedVertices[i].getLabel() == tempLabel) {
+				tempDij = finishedVertices[i];
+				break;
+			}
+		}
+	} while (!(tempDij.getLabel() == startPoint));
+	
+	fout << "1. " << startPoint << endl;
+	for (unsigned i = 0; i < path.size(); i++) {
+		fout << i+2 << ". " << path[path.size()-1-i] << endl;
+	}
 }
 
 
