@@ -70,7 +70,6 @@ Dijkstra<LabelType>::Dijkstra()
 template <class LabelType>
 Dijkstra<LabelType>::~Dijkstra()
 {
-	// delete the contents of unfinishedVertices and finishedVertices
 	unfinishedVertices.clear();
 	finishedVertices.clear();
 }
@@ -78,6 +77,9 @@ Dijkstra<LabelType>::~Dijkstra()
 template <class LabelType>
 bool Dijkstra<LabelType>::applyDijkstra()
 {
+	if (numberOfVertices == 0)
+		return false;
+
 	// unfinished vertices is filled with dij vertices
 	int startIndex = 0;
 	for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
@@ -100,9 +102,12 @@ bool Dijkstra<LabelType>::applyDijkstra()
 
 	finishedVertices.push_back(unfinishedVertices[0]);
 
+	Vertex<LabelType>* currentVertex;
+
+	// figure out how to go through again to update, even if size's are equal
 	while (finishedVertices.size() < unfinishedVertices.size()) {
 		// number of neighbors at the current vertex
-		Vertex<LabelType>* currentVertex = vertices.getItem(finishedVertices.back().getLabel());
+		currentVertex = vertices.getItem(finishedVertices.back().getLabel());
 		int numNeighbors = currentVertex->getNumberOfNeighbors();
 		currentVertex->resetNeighbor();
 
@@ -160,7 +165,6 @@ bool Dijkstra<LabelType>::applyDijkstra()
 						// set currentVertex to another finishedVertices
 						currentVertex = vertices.getItem(finishedVertices[resetCurrentIndex++].getLabel());
 						// then recheck all those neighbors
-						cout << "find new current" << endl;
 						break;
 					}
 
@@ -175,6 +179,32 @@ bool Dijkstra<LabelType>::applyDijkstra()
 			}
 		}
 	}	
+	
+	// relax last neighbor that caused loop to exit
+	currentVertex = vertices.getItem(finishedVertices.back().getLabel());
+	currentVertex->resetNeighbor();
+	int numNeighbors = currentVertex->getNumberOfNeighbors();
+	currentVertex->resetNeighbor();
+
+	// relax each neighbor
+	for (int k = 0; k < numNeighbors; k++) {
+		LabelType neighbor = currentVertex->getNextNeighbor();
+
+		// get neighbor unfinishedVertices index
+		unsigned neighborIndex = 0;
+		for (unsigned l = 0; l < unfinishedVertices.size(); l++) {
+			if (unfinishedVertices[l].getLabel() == neighbor){
+				neighborIndex = l;
+				break;
+			}
+		}
+		if (finishedVertices.back().getDist() + getEdgeWeight(finishedVertices.back().getLabel(), neighbor) <
+			unfinishedVertices[neighborIndex].getDist()) {
+			// found improved route
+			unfinishedVertices[neighborIndex].setDist(finishedVertices.back().getDist() + getEdgeWeight(finishedVertices.back().getLabel(), neighbor));
+			unfinishedVertices[neighborIndex].setPrev(finishedVertices.back().getLabel());
+		}
+	}
 
 	return true;
 }
@@ -242,11 +272,19 @@ int Dijkstra<LabelType>::distanceTo(LabelType x)
 {
 	applyDijkstra();
 
+	/*
 	for (unsigned i = 0; i < finishedVertices.size(); i++) {
 		if (finishedVertices[i].getLabel() == x) {
 			return finishedVertices[i].getDist();
 		}
+	}*/
+
+	for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
+		if (unfinishedVertices[i].getLabel() == x) {
+			return unfinishedVertices[i].getDist();
+		}
 	}
+
 	// not found
 	cout << "not found" << endl;
 	return -1;
