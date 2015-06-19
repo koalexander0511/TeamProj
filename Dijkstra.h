@@ -41,9 +41,10 @@ private:
 	LabelType startPoint;
 	LabelType endPoint;
 
-	vector<DijkstraVertex> finishedVertices; // stored dynamically
-	vector<DijkstraVertex> unfinishedVertices; // stored dynamically
+	vector<DijkstraVertex> finishedVertices;
+	vector<DijkstraVertex> unfinishedVertices;
 
+	// preform Dijkstra algorithm
 	bool applyDijkstra();
 
 public:
@@ -56,6 +57,7 @@ public:
 	bool setStartPoint(LabelType);
 	bool setEndPoint(LabelType);
 
+	// find distance to a vertex from startPoint
 	int distanceTo(LabelType);
 
 	void writeDijkstraToFile(ofstream&);
@@ -80,7 +82,7 @@ bool Dijkstra<LabelType>::applyDijkstra()
 	if (numberOfVertices == 0)
 		return false;
 
-	// unfinished vertices is filled with dij vertices
+	// unfinished vertices is filled with dijkstra vertices
 	int startIndex = 0;
 	for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
 		unfinishedVertices[i].setDist(INT_MAX);
@@ -104,7 +106,6 @@ bool Dijkstra<LabelType>::applyDijkstra()
 
 	Vertex<LabelType>* currentVertex;
 
-	// figure out how to go through again to update, even if size's are equal
 	while (finishedVertices.size() < unfinishedVertices.size()) {
 		// number of neighbors at the current vertex
 		currentVertex = vertices.getItem(finishedVertices.back().getLabel());
@@ -180,7 +181,7 @@ bool Dijkstra<LabelType>::applyDijkstra()
 		}
 	}	
 	
-	// relax last neighbor that caused loop to exit
+	// relax last neighbors of vertex that caused loop to exit
 	currentVertex = vertices.getItem(finishedVertices.back().getLabel());
 	currentVertex->resetNeighbor();
 	int numNeighbors = currentVertex->getNumberOfNeighbors();
@@ -252,8 +253,7 @@ bool Dijkstra<LabelType>::setStartPoint(LabelType startP)
 {
 	if (!this->vertices.contains(startP))
 		return false;
-	startPoint = startP; // posibly change this to delete previous startPoint or,
-	// not use new but point to another existing value
+	startPoint = startP;
 	return false;
 }
 
@@ -271,13 +271,6 @@ template <class LabelType>
 int Dijkstra<LabelType>::distanceTo(LabelType x)
 {
 	applyDijkstra();
-
-	/*
-	for (unsigned i = 0; i < finishedVertices.size(); i++) {
-		if (finishedVertices[i].getLabel() == x) {
-			return finishedVertices[i].getDist();
-		}
-	}*/
 
 	for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
 		if (unfinishedVertices[i].getLabel() == x) {
