@@ -80,7 +80,7 @@ int main()
 		ifstream fin;
 
 		/*
-		// reading graph from file should be selected as a menu option
+		reading graph from file should be selected as a menu option
 		while(openInputFile(fin));
 		createGraphFromFile(fin, g1);
 		fin.close();
@@ -100,7 +100,6 @@ int main()
 			{
 			case 1: //display help menu
 			{
-				displayMenu();
 				break;
 			}
 
