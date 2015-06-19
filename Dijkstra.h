@@ -294,9 +294,9 @@ void Dijkstra<LabelType>::writeDijkstraToFile(ofstream& fout)
 
 	// assign tempDij to endPoint
 	DijkstraVertex tempDij;
-	for (unsigned i = 0; i < finishedVertices.size(); i++) {
-		if (finishedVertices[i].getLabel() == endPoint) {
-			tempDij = finishedVertices[i];
+	for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
+		if (unfinishedVertices[i].getLabel() == endPoint) {
+			tempDij = unfinishedVertices[i];
 			fout << "Distance to " << tempDij.getLabel() << ": " << tempDij.getDist() << endl;
 			break;
 		}
@@ -308,9 +308,9 @@ void Dijkstra<LabelType>::writeDijkstraToFile(ofstream& fout)
 		LabelType tempLabel = tempDij.getPrev();
 
 		// set tempDij to previous
-		for (unsigned i = 0; i < finishedVertices.size(); i++) {
-			if (finishedVertices[i].getLabel() == tempLabel) {
-				tempDij = finishedVertices[i];
+		for (unsigned i = 0; i < unfinishedVertices.size(); i++) {
+			if (unfinishedVertices[i].getLabel() == tempLabel) {
+				tempDij = unfinishedVertices[i];
 				break;
 			}
 		}
