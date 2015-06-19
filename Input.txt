@@ -8,7 +8,7 @@ MIA Miami BOS Boston 3
 BOS Boston LAS Las_Vegas 5
 LAS Las_Vegas SAN San_Diego 2
 SFO San_Francisco LAX Los_Angeles 4
-SAN San_Diego LAS Los_Angeles 1
+SAN San_Diego LAX Los_Angeles 1
 LAS Las_Vegas SJC San_Jose 3
 LAS Las_Vegas ATL Atlanta 5
 ORD Chicago JFK New_York 3
