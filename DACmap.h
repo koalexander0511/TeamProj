@@ -34,6 +34,7 @@ public:
 // Just a map, but for easier use of a map (dictionary)
 template <class KeyType, class ItemType>
 class DACmap
+
 {
 private:
 	map<KeyType, ItemType> dacMap;
