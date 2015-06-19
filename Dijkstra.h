@@ -58,7 +58,7 @@ public:
 
 	int distanceTo(LabelType);
 
-	void writeToFile(ofstream&);
+	void writeDijkstraToFile(ofstream&);
 };
 
 template <class LabelType>
@@ -128,32 +128,50 @@ bool Dijkstra<LabelType>::applyDijkstra()
 		}
 
 		// iterate through neighbors again, and push_back() to finishedVertices one that is not already in finishedVertices
-		currentVertex->resetNeighbor();
-		for (int k = 0; k < numNeighbors; k++) {
-			LabelType neighbor = currentVertex->getNextNeighbor();
-			// get neighbor unfinishedVertices index
-			unsigned neighborIndex = 0;
-			for (unsigned l = 0; l < unfinishedVertices.size(); l++) {
-				if (unfinishedVertices[l].getLabel() == neighbor){
-					neighborIndex = l;
+		int resetCurrentIndex = 0;
+		bool breakWhile = false;
+
+		while (!breakWhile) {
+			currentVertex->resetNeighbor();
+			numNeighbors = currentVertex->getNumberOfNeighbors();
+			currentVertex->resetNeighbor();
+			for (int k = 0; k < numNeighbors; k++) {
+				LabelType neighbor = currentVertex->getNextNeighbor();
+				// get neighbor unfinishedVertices index
+				unsigned neighborIndex = 0;
+				for (unsigned l = 0; l < unfinishedVertices.size(); l++) {
+					if (unfinishedVertices[l].getLabel() == neighbor){
+						neighborIndex = l;
+						break;
+					}
+				}
+				// check if that neighbor has already been added
+				bool added = false;
+				for (unsigned l = 0; l < finishedVertices.size(); l++) {
+					if (finishedVertices[l].getLabel() == unfinishedVertices[neighborIndex].getLabel()) {
+						added = true;
+						break;
+					}
+				}
+				if (added) {
+					// if it's on the last neighbor at this point, and finishedVertices.size < unfinishedVertices
+					// then find an unfinished neighbor from another vertex
+					if (k == numNeighbors - 1 && finishedVertices.size() < unfinishedVertices.size()) {
+						// set currentVertex to another finishedVertices
+						currentVertex = vertices.getItem(finishedVertices[resetCurrentIndex++].getLabel());
+						// then recheck all those neighbors
+						cout << "find new current" << endl;
+						break;
+					}
+
+					continue;
+				}
+				else {
+					// push_back neighbor that is not already in finishedVertices
+					finishedVertices.push_back(unfinishedVertices[neighborIndex]);
+					breakWhile = true;
 					break;
 				}
-			}
-			// check if that neighbor has already been added
-			bool added = false;
-			for (unsigned l = 0; l < finishedVertices.size(); l++) {
-				if (finishedVertices[l].getLabel() == unfinishedVertices[neighborIndex].getLabel()) {
-					added = true;
-					break;
-				}
-			}
-			if (added) {
-				continue;
-			}
-			else {
-				// push_back neighbor that is not already in finishedVertices
-				finishedVertices.push_back(unfinishedVertices[neighborIndex]);
-				break;
 			}
 		}
 	}	
@@ -235,7 +253,7 @@ int Dijkstra<LabelType>::distanceTo(LabelType x)
 }
 
 template <class LabelType>
-void Dijkstra<LabelType>::writeToFile(ofstream& fout)
+void Dijkstra<LabelType>::writeDijkstraToFile(ofstream& fout)
 {
 	applyDijkstra();
 
