@@ -1,0 +1,6 @@
+SFO San_Francisco SAN San_Diego 2
+SFO San_Francisco ORD Chicago 5
+SAN San_Diego ATL Atlanta 6
+ATL Atlanta ORD Chicago 1
+JFK New_York ORD Chicago 4
+ATL Atlanta JFK New_York 2
