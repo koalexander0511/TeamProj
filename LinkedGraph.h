@@ -88,7 +88,7 @@ public:
 
    void undo(); // undo last add/remove
    bool searchVertex(const LabelType&) const; // checks if graph contains that label
-   virtual void writeToFile(ofstream&);
+   void writeGraphToFile(ofstream&);
 };
 
 template<class LabelType>
@@ -104,7 +104,6 @@ LinkedGraph(): numberOfVertices(0), numberOfEdges(0)
 template<class LabelType>
 LinkedGraph<LabelType>::~LinkedGraph()
 {
-    // delete each undostack element
 	int i = undoStack->size();
     for(; i > 0; i--) {
 		undo();
@@ -347,13 +346,10 @@ bool LinkedGraph<LabelType>::searchVertex(const LabelType& target) const
     return false;
 }
 
-// WRITE THE MEMBER FUNCTION HERE TO
-   //         WRITE THE GRAPH TO A TEXT FILE (SUGGEST TO PASS AN
-   //        ofstream TO THIS !
 template <class LabelType>
-void LinkedGraph<LabelType>::writeToFile(ofstream& fout)
+void LinkedGraph<LabelType>::writeGraphToFile(ofstream& fout)
 {
-    fout << "LinkedGraph write to file. " << endl;
+	
 }
 
 
