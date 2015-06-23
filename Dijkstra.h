@@ -179,13 +179,8 @@ bool Dijkstra<LabelType>::applyDijkstra()
 				}
 			}
 		}
-<<<<<<< HEAD
 	}
 
-=======
-	}	
-	
->>>>>>> origin/master
 	// relax last neighbors of vertex that caused loop to exit
 	currentVertex = vertices.getItem(finishedVertices.back().getLabel());
 	currentVertex->resetNeighbor();
